@@ -39,6 +39,7 @@ nobase_library_include_HEADERS = $(h_sources_public)
 check_PROGRAMS = \
   tests/test_tuple_cdr \
   tests/test_tuple_end \
+  tests/test_tuple_interlace \
   tests/test_tuple_start \
   tests/test_tuple_subset
 
@@ -58,6 +59,13 @@ tests_test_tuple_end_SOURCES = \
 tests_test_tuple_end_CXXFLAGS = \
 	$(COMMON_CXXFLAGS)
 tests_test_tuple_end_LDADD = \
+	$(PROJECT_LIBS)
+
+tests_test_tuple_interlace_SOURCES = \
+	tests/test_tuple_interlace.cc
+tests_test_tuple_interlace_CXXFLAGS = \
+	$(COMMON_CXXFLAGS)
+tests_test_tuple_interlace_LDADD = \
 	$(PROJECT_LIBS)
 
 tests_test_tuple_start_SOURCES = \

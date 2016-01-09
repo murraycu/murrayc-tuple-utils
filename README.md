@@ -1,2 +1,2 @@
-# murrayc_tuple_utils
+# murrayc-tuple-utils
 A rough collection of code to manipulate C++ std::tuple&lt;>s.

@@ -71,6 +71,7 @@ Makefile.in
 /docs/reference/*.devhelp2
 /docs/reference/html/
 
+tests/test_tuple_cat
 tests/test_tuple_cdr
 tests/test_tuple_end
 tests/test_tuple_interlace

@@ -1,7 +1,6 @@
 #include <cstdlib>
 #include <cassert>
 #include <utility>
-#include <iostream>
 #include <tuple-utils/tuple_interlace.h>
 
 void test_tuple_type_interlace_empty() {

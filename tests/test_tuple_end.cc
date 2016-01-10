@@ -17,7 +17,6 @@
 #include <tuple-utils/tuple_end.h>
 #include <cstdlib>
 #include <cassert>
-#include <iostream>
 
 void test_tuple_type_end()
 {

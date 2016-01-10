@@ -29,8 +29,6 @@ namespace {
 template<template<typename> class T_transformer, std::size_t index>
 struct tuple_transform_each_impl
 {
-  tuple_transform_each_impl() = delete;
-
   template<typename T>
   static
   decltype(auto)

@@ -62,7 +62,7 @@ void test_tuple_transform_each()
       "unexpected tuple_transform_each()ed tuple size.");
 
     assert(std::get<0>(t_transformed) == "1");
-    assert(std::get<1>(t_transformed) == "2.1"); //TODO: Use the actual value, maybe "2.10000000", or suchlike.
+    assert(std::get<1>(t_transformed).substr(0, 3) == "2.1");
     assert(std::get<2>(t_transformed) == "3");
 
     static_assert(std::is_same<decltype(t_transformed), decltype(t_expected)>::value,

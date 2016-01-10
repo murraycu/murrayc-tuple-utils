@@ -34,9 +34,8 @@ struct tuple_type_transform_each_impl
 private:
   using from_element_type = typename std::tuple_element<index, T>::type;
 
-  //TODO: The compiler rejects this:
   using to_element_type =
-    typename std::result_of<T_transformer<from_element_type>::transform(const from_element_type&)>::type;
+    typename std::result_of<decltype(&T_transformer<from_element_type>::transform)(const from_element_type&)>::type;
 
   //This gets the type of the function, not its return type:
   //using to_element_type = decltype(T_transformer<from_element_type>::transform);

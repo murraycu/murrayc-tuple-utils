@@ -39,13 +39,6 @@ void test_tuple_type_transform_each_same_types()
     type_tuple_original, transform_to_string>::type;
   using type_tuple_expected = std::tuple<std::string, std::string>;
 
-  //TODO: This is just here to make the compiler mention the actual tuple type
-  //when the tuple type is not as expected (type_tuple_expected). Remove this
-  //when we fix that problem.
-  type_tuple_transformed a("2", "3");
-  std::cout << std::get<0>(a) << std::endl;
-  //std::cout << typeid(type_tuple_transformed).name() << std::endl;
-
   static_assert(std::is_same<type_tuple_transformed, type_tuple_expected>::value,
     "unexpected tuple_transform_each()ed tuple type");
 }

@@ -39,7 +39,7 @@ void test_tuple_transform_each()
 {
   {
     auto t_original = std::make_tuple(1, 2, 3);
-    auto t_transformed = tupleutils::tuple_transform_each<transform_to_string<int>>(t_original);
+    auto t_transformed = tupleutils::tuple_transform_each<transform_to_string>(t_original);
     auto t_expected = std::make_tuple(std::string("1"), std::string("2"), std::string("3"));
 
     static_assert(std::tuple_size<decltype(t_transformed)>::value == 3,
@@ -52,6 +52,25 @@ void test_tuple_transform_each()
     static_assert(std::is_same<decltype(t_transformed), decltype(t_expected)>::value,
       "unexpected transform_each()ed tuple type");
   }
+
+  {
+    auto t_original = std::make_tuple(1, (double)2.1f, 3);
+    auto t_transformed = tupleutils::tuple_transform_each<transform_to_string>(t_original);
+    auto t_expected = std::make_tuple(std::string("1"), std::string("2"), std::string("3"));
+
+    static_assert(std::tuple_size<decltype(t_transformed)>::value == 3,
+      "unexpected tuple_transform_each()ed tuple size.");
+
+    assert(std::get<0>(t_transformed) == "1");
+    assert(std::get<1>(t_transformed) == "2.1"); //TODO: Use the actual value, maybe "2.10000000", or suchlike.
+    assert(std::get<2>(t_transformed) == "3");
+
+    static_assert(std::is_same<decltype(t_transformed), decltype(t_expected)>::value,
+      "unexpected transform_each()ed tuple type");
+  }
+
+  //TODO: A test in which the transformer returns different types depending on the input element type.
+
 }
 
 int main()

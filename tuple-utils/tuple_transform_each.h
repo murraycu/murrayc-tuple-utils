@@ -26,7 +26,7 @@ namespace tupleutils
 
 namespace {
 
-template<typename T_transformer, std::size_t index>
+template<template<typename> class T_transformer, std::size_t index>
 struct tuple_transform_each_impl
 {
   tuple_transform_each_impl() = delete;
@@ -35,7 +35,8 @@ struct tuple_transform_each_impl
   static
   decltype(auto)
   tuple_transform_each(const T& t) {
-    const auto element = T_transformer::transform(std::get<index>(t));
+    using element_type = typename std::tuple_element<index, T>::type;
+    const auto element = T_transformer<element_type>::transform(std::get<index>(t));
     const auto t_element = std::make_tuple(element);
     
     const auto t_start = tuple_start<index>(t);
@@ -52,14 +53,15 @@ struct tuple_transform_each_impl
   }
 };
 
-template<typename T_transformer>
+template<template<typename> class T_transformer, std::size_t index>
 struct tuple_transform_each_impl<T_transformer, 0>
 {
   template<typename T>
   static
   decltype(auto)
   tuple_transform_each(const T& t) {
-    const auto element = T_transformer::transform(std::get<0>(t));
+    using element_type = typename std::tuple_element<index, T>::type;
+    const auto element = T_transformer<element_type>::transform(std::get<0>(t));
     const auto tuple_element = std::make_tuple(element);
     const auto tuple_rest = tuple_cdr(t);
     return std::tuple_cat(tuple_element, tuple_rest);
@@ -72,7 +74,7 @@ struct tuple_transform_each_impl<T_transformer, 0>
  * Get a tuple with each element having the transformed value of the element
  * in the original tuple.
  */
-template<typename T_transformer, typename T>
+template<template<typename> class T_transformer, typename T>
 decltype(auto)
 tuple_transform_each(const T& t) {
   constexpr auto size = std::tuple_size<T>::value; 

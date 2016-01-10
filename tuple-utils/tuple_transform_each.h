@@ -17,12 +17,79 @@
 #ifndef _MURRAYC_TUPLE_UTILS_TUPLE_TRANSFORM_EACH_H_
 #define _MURRAYC_TUPLE_UTILS_TUPLE_TRANSFORM_EACH_H_
 
+#include <tuple-utils/tuple_cat.h>
 #include <tuple-utils/tuple_cdr.h>
 #include <tuple-utils/tuple_start.h>
 #include <tuple-utils/tuple_end.h>
+#include <type_traits>
 
 namespace tupleutils
 {
+
+namespace {
+
+template<typename T, template<typename> class T_transformer, std::size_t index>
+struct tuple_type_transform_each_impl
+{
+private:
+  using from_element_type = typename std::tuple_element<index, T>::type;
+
+  //TODO: The compiler rejects this:
+  using to_element_type =
+    typename std::result_of<T_transformer<from_element_type>::transform(const from_element_type&)>::type;
+
+  //This gets the type of the function, not its return type:
+  //using to_element_type = decltype(T_transformer<from_element_type>::transform);
+  //
+  //This also seems to get the type of the function, not its return type:
+  //using to_element_type = decltype(T_transformer<from_element_type>::transform(from_element_type()));
+
+  using t_element_type = std::tuple<to_element_type>;
+
+  using t_type_start = typename tuple_type_start<T, index>::type;
+
+  using t_type_end = typename tuple_type_end<T, std::tuple_size<T>::value - index - 1>::type;
+
+  using t_type_with_transformed_element =
+    typename tuple_type_cat<
+      typename tuple_type_cat<t_type_start, t_element_type>::type,
+      t_type_end>::type;
+
+public:
+  using type = typename tuple_type_transform_each_impl<t_type_with_transformed_element, T_transformer, index - 1>::type;
+};
+
+template<typename T, template<typename> class T_transformer>
+struct tuple_type_transform_each_impl<T, T_transformer, 0>
+{
+private:
+  static constexpr std::size_t index = 0;
+  using from_element_type = typename std::tuple_element<index, T>::type;
+  using to_element_type = decltype(T_transformer<from_element_type>::transform);
+  using t_element_type = std::tuple<to_element_type>;
+
+  using t_type_end = typename tuple_type_end<T, std::tuple_size<T>::value - index - 1>::type;
+
+  using t_type_with_transformed_element =
+    typename tuple_type_cat<t_element_type, t_type_end>::type;
+
+public:
+  using type = t_type_with_transformed_element;
+};
+
+} //anonymous namespace
+
+
+/**
+ * Get a tuple with each element having the transformed value of the element
+ * in the original tuple.
+ */
+
+template<typename T, template<typename> class T_transformer>
+struct tuple_type_transform_each
+{
+  using type = typename tuple_type_transform_each_impl<T, T_transformer, std::tuple_size<T>::value - 1>::type;
+};
 
 namespace {
 
@@ -43,9 +110,7 @@ struct tuple_transform_each_impl
     const auto t_end = tuple_end<size - index - 1>(t);
 
     const auto t_with_transformed_element =
-      std::tuple_cat(
-        std::tuple_cat(t_start, t_element),
-        t_end);
+      std::tuple_cat(t_start, t_element, t_end);
     return tuple_transform_each_impl<T_transformer, index - 1>::tuple_transform_each(
       t_with_transformed_element);
   }

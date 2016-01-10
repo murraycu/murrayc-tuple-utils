@@ -136,21 +136,19 @@ void test_tuple_type_transform_each_multiple_types()
 //In these tests, t_expected has elements of different types.
 void test_tuple_transform_each_multiple_types()
 {
-  {
-    auto t_original = std::make_tuple(1, (double)2.1f, std::string("3"));
-    auto t_transformed = tupleutils::tuple_transform_each<transform_to_something>(t_original);
-    auto t_expected = std::make_tuple(std::string("1"), '2', 3);
+  auto t_original = std::make_tuple(1, (double)2.1f, std::string("3"));
+  auto t_transformed = tupleutils::tuple_transform_each<transform_to_something>(t_original);
+  auto t_expected = std::make_tuple(std::string("1"), '2', 3);
 
-    static_assert(std::tuple_size<decltype(t_transformed)>::value == 3,
-      "unexpected tuple_transform_each()ed tuple size.");
+  static_assert(std::tuple_size<decltype(t_transformed)>::value == 3,
+    "unexpected tuple_transform_each()ed tuple size.");
 
-    assert(std::get<0>(t_transformed) == "1");
-    assert(std::get<1>(t_transformed) == '2');
-    assert(std::get<2>(t_transformed) == 3);
+  assert(std::get<0>(t_transformed) == "1");
+  assert(std::get<1>(t_transformed) == '2');
+  assert(std::get<2>(t_transformed) == 3);
 
-    static_assert(std::is_same<decltype(t_transformed), decltype(t_expected)>::value,
-      "unexpected transform_each()ed tuple type");
-  }
+  static_assert(std::is_same<decltype(t_transformed), decltype(t_expected)>::value,
+    "unexpected transform_each()ed tuple type");
 }
 
 int main()

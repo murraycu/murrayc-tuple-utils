@@ -73,9 +73,11 @@ Makefile.in
 
 tests/test_tuple_cdr
 tests/test_tuple_end
+tests/test_tuple_interlace
 tests/test_tuple_start
 tests/test_tuple_subset
-tests/test_tuple_interlace
+tests/test_tuple_transform_each
+
 
 
 

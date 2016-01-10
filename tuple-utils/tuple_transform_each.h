@@ -56,13 +56,15 @@ struct tuple_transform_each_impl
 template<template<typename> class T_transformer>
 struct tuple_transform_each_impl<T_transformer, 0>
 {
-  static constexpr std::size_t index = 0;
+
   template<typename T>
   static
   decltype(auto)
   tuple_transform_each(const T& t) {
+    constexpr std::size_t index = 0;
+
     using element_type = typename std::tuple_element<index, T>::type;
-    const auto element = T_transformer<element_type>::transform(std::get<0>(t));
+    const auto element = T_transformer<element_type>::transform(std::get<index>(t));
     const auto tuple_element = std::make_tuple(element);
     const auto tuple_rest = tuple_cdr(t);
     return std::tuple_cat(tuple_element, tuple_rest);

@@ -35,7 +35,8 @@ public:
   } 
 };
 
-void test_tuple_transform_each()
+//In these tests, t_expected has elements all of the same type.
+void test_tuple_transform_each_same_types()
 {
   {
     auto t_original = std::make_tuple(1, 2, 3);
@@ -68,15 +69,77 @@ void test_tuple_transform_each()
     static_assert(std::is_same<decltype(t_transformed), decltype(t_expected)>::value,
       "unexpected transform_each()ed tuple type");
   }
+}
 
-  //TODO: A test in which the transformer returns different types depending on the input element type.
 
+//The general template declaration.
+//We then provide specializations for each type,
+//so we can test having a different return value for each T_element_from type.
+template <class T_element_from>
+class transform_to_something;
+
+//An int will be converted to a std::string:
+template <>
+class transform_to_something<int>
+{
+public:
+  static
+  std::string
+  transform(const int& from) {
+    return std::to_string(from);
+  } 
+};
+
+//A double will be converted to a char:
+template <>
+class transform_to_something<double>
+{
+public:
+  static
+  char
+  transform(const double& from) {
+    return std::to_string(from)[0];
+  } 
+};
+
+//An std::string will be converted to an int:
+template <>
+class transform_to_something<std::string>
+{
+public:
+  static
+  int
+  transform(const std::string& from) {
+    return std::stoi(from);
+  } 
+};
+ 
+//In these tests, t_expected has elements of different types.
+void test_tuple_transform_each_multiple_types()
+{
+  {
+    auto t_original = std::make_tuple(1, (double)2.1f, std::string("3"));
+    auto t_transformed = tupleutils::tuple_transform_each<transform_to_something>(t_original);
+    auto t_expected = std::make_tuple(std::string("1"), '2', 3);
+
+    static_assert(std::tuple_size<decltype(t_transformed)>::value == 3,
+      "unexpected tuple_transform_each()ed tuple size.");
+
+    assert(std::get<0>(t_transformed) == "1");
+    assert(std::get<1>(t_transformed) == '2');
+    assert(std::get<2>(t_transformed) == 3);
+
+    static_assert(std::is_same<decltype(t_transformed), decltype(t_expected)>::value,
+      "unexpected transform_each()ed tuple type");
+  }
 }
 
 int main()
 {
   test_tuple_type_transform_each();
-  test_tuple_transform_each();
+
+  test_tuple_transform_each_same_types();
+  test_tuple_transform_each_multiple_types();
       
   return EXIT_SUCCESS;
 }

@@ -112,7 +112,6 @@ struct tuple_transform_each_impl
 template<template<typename> class T_transformer>
 struct tuple_transform_each_impl<T_transformer, 0>
 {
-
   template<typename T>
   static
   decltype(auto)

@@ -40,6 +40,7 @@ check_PROGRAMS = \
   tests/test_tuple_cat \
   tests/test_tuple_cdr \
   tests/test_tuple_end \
+  tests/test_tuple_for_each \
   tests/test_tuple_interlace \
   tests/test_tuple_start \
   tests/test_tuple_subset \
@@ -68,6 +69,13 @@ tests_test_tuple_end_SOURCES = \
 tests_test_tuple_end_CXXFLAGS = \
 	$(COMMON_CXXFLAGS)
 tests_test_tuple_end_LDADD = \
+	$(PROJECT_LIBS)
+
+tests_test_tuple_for_each_SOURCES = \
+	tests/test_tuple_for_each.cc
+tests_test_tuple_for_each_CXXFLAGS = \
+	$(COMMON_CXXFLAGS)
+tests_test_tuple_for_each_LDADD = \
 	$(PROJECT_LIBS)
 
 tests_test_tuple_interlace_SOURCES = \

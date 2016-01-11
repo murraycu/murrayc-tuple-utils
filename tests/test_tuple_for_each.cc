@@ -45,6 +45,32 @@ void test_tuple_for_each_same_types()
   }
 }
 
+template <class T_element_from>
+class for_each_simple_with_extras
+{
+public:
+  static
+  void
+  visit(const T_element_from& from, int extra1, const std::string& extra2) {
+    std::cout << "for_each_simple_with_extras(): from=" <<
+      std::to_string(from) <<
+      ", extra1: " << extra1 <<
+      ", extra2: " << extra2 << std::endl;
+  }
+};
+
+void test_tuple_for_each_same_types_with_extras()
+{
+  {
+    auto t_original = std::make_tuple(1, 2, 3);
+    tupleutils::tuple_for_each<for_each_simple_with_extras>(t_original, 99, "ninetynine");
+  }
+
+  {
+    auto t_original = std::make_tuple(1, (double)2.1f, 3);
+    tupleutils::tuple_for_each<for_each_simple_with_extras>(t_original, 89, "eightynine");
+  }
+}
 
 //The general template declaration.
 //We then provide specializations for each type,
@@ -97,6 +123,8 @@ void test_tuple_for_each_multiple_types()
 int main()
 {
   test_tuple_for_each_same_types();
+  test_tuple_for_each_same_types_with_extras();
+
   test_tuple_for_each_multiple_types();
       
   return EXIT_SUCCESS;

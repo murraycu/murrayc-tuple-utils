@@ -6,6 +6,7 @@ h_sources_public = \
   tuple-utils/tuple_end.h \
   tuple-utils/tuple_for_each.h \
   tuple-utils/tuple_interlace.h \
+  tuple-utils/tuple_print.h \
   tuple-utils/tuple_start.h \
   tuple-utils/tuple_subset.h \
   tuple-utils/tuple_transform_each.h

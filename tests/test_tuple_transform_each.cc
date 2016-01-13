@@ -15,7 +15,6 @@
  */
 
 #include <tuple-utils/tuple_transform_each.h>
-#include <tuple-utils/tuple_transform_each_const.h>
 #include <utility>
 #include <cstdlib>
 #include <cassert>
@@ -26,7 +25,7 @@ class transform_to_string
 public:
   static
   decltype(auto)
-  transform(const T_element_from& from) {
+  transform(T_element_from& from) {
     return std::to_string(from);
   } 
 };
@@ -47,7 +46,7 @@ void test_tuple_transform_each_same_types()
 {
   {
     auto t_original = std::make_tuple(1, 2, 3);
-    auto t_transformed = tupleutils::tuple_transform_each_const<transform_to_string>(t_original);
+    auto t_transformed = tupleutils::tuple_transform_each<transform_to_string>(t_original);
     auto t_expected = std::make_tuple(std::string("1"), std::string("2"), std::string("3"));
 
     static_assert(std::tuple_size<decltype(t_transformed)>::value == 3,
@@ -63,7 +62,7 @@ void test_tuple_transform_each_same_types()
 
   {
     auto t_original = std::make_tuple(1, (double)2.1f, 3);
-    auto t_transformed = tupleutils::tuple_transform_each_const<transform_to_string>(t_original);
+    auto t_transformed = tupleutils::tuple_transform_each<transform_to_string>(t_original);
     auto t_expected = std::make_tuple(std::string("1"), std::string("2"), std::string("3"));
 
     static_assert(std::tuple_size<decltype(t_transformed)>::value == 3,
@@ -92,7 +91,7 @@ class transform_to_something<int>
 public:
   static
   std::string
-  transform(const int& from) {
+  transform(int& from) {
     return std::to_string(from);
   } 
 };
@@ -104,7 +103,7 @@ class transform_to_something<double>
 public:
   static
   char
-  transform(const double& from) {
+  transform(double& from) {
     return std::to_string(from)[0];
   } 
 };
@@ -116,7 +115,7 @@ class transform_to_something<std::string>
 public:
   static
   int
-  transform(const std::string& from) {
+  transform(std::string& from) {
     return std::stoi(from);
   } 
 };
@@ -136,7 +135,7 @@ void test_tuple_type_transform_each_multiple_types()
 void test_tuple_transform_each_multiple_types()
 {
   auto t_original = std::make_tuple(1, (double)2.1f, std::string("3"));
-  auto t_transformed = tupleutils::tuple_transform_each_const<transform_to_something>(t_original);
+  auto t_transformed = tupleutils::tuple_transform_each<transform_to_something>(t_original);
   auto t_expected = std::make_tuple(std::string("1"), '2', 3);
 
   static_assert(std::tuple_size<decltype(t_transformed)>::value == 3,

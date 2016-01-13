@@ -35,7 +35,7 @@ private:
   using from_element_type = typename std::tuple_element<index, T>::type;
 
   using to_element_type =
-    typename std::result_of<decltype(&T_transformer<from_element_type>::transform)(const from_element_type&)>::type;
+    typename std::result_of<decltype(&T_transformer<from_element_type>::transform)(from_element_type&)>::type;
 
   using t_element_type = std::tuple<to_element_type>;
 
@@ -58,7 +58,7 @@ struct tuple_type_transform_each_impl<T, T_transformer, 0>
 private:
   static constexpr std::size_t index = 0;
   using from_element_type = typename std::tuple_element<index, T>::type;
-  using to_element_type = typename std::result_of<decltype(&T_transformer<from_element_type>::transform)(const from_element_type&)>::type;
+  using to_element_type = typename std::result_of<decltype(&T_transformer<from_element_type>::transform)(from_element_type&)>::type;
   using t_element_type = std::tuple<to_element_type>;
 
   using t_type_end = typename tuple_type_end<T, std::tuple_size<T>::value - index - 1>::type;
@@ -90,11 +90,11 @@ template<template<typename> class T_transformer, std::size_t index>
 struct tuple_transform_each_impl
 {
   //TODO: Avoid the need to pass t_original all the way into the recursion?
-  template<typename T>
+  template<typename T_current, typename T_original>
   static
   decltype(auto)
-  tuple_transform_each(T& t, T& t_original) {
-    using element_type = typename std::tuple_element<index, T>::type;
+  tuple_transform_each(T_current& t, T_original& t_original) {
+    using element_type = typename std::tuple_element<index, T_current>::type;
 
     auto& from = std::get<index>(t_original);
     const auto element = T_transformer<element_type>::transform(from);
@@ -102,7 +102,7 @@ struct tuple_transform_each_impl
     
     const auto t_start = tuple_start<index>(t);
 
-    constexpr auto size = std::tuple_size<T>::value;
+    constexpr auto size = std::tuple_size<T_current>::value;
 
     //t_end's elements will be copies of the elements in t, so this method's
     //caller won't see the changes made in the subsequent call of
@@ -122,13 +122,13 @@ struct tuple_transform_each_impl
 template<template<typename> class T_transformer>
 struct tuple_transform_each_impl<T_transformer, 0>
 {
-  template<typename T>
+  template<typename T_current, typename T_original>
   static
   decltype(auto)
-  tuple_transform_each(T& t, T& t_original) {
+  tuple_transform_each(T_current& t, T_original& t_original) {
     constexpr std::size_t index = 0;
 
-    using element_type = typename std::tuple_element<index, T>::type;
+    using element_type = typename std::tuple_element<index, T_original>::type;
     const auto element = T_transformer<element_type>::transform(std::get<index>(t_original));
     const auto tuple_element = std::make_tuple(element);
     const auto tuple_rest = tuple_cdr(t);

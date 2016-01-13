@@ -15,6 +15,7 @@
  */
 
 #include <tuple-utils/tuple_transform_each.h>
+#include <tuple-utils/tuple_transform_each_const.h>
 #include <utility>
 #include <cstdlib>
 #include <cassert>
@@ -48,7 +49,7 @@ void test_tuple_transform_each_same_types()
 {
   {
     auto t_original = std::make_tuple(1, 2, 3);
-    auto t_transformed = tupleutils::tuple_transform_each<transform_to_string>(t_original);
+    auto t_transformed = tupleutils::tuple_transform_each_const<transform_to_string>(t_original);
     auto t_expected = std::make_tuple(std::string("1"), std::string("2"), std::string("3"));
 
     static_assert(std::tuple_size<decltype(t_transformed)>::value == 3,
@@ -64,7 +65,7 @@ void test_tuple_transform_each_same_types()
 
   {
     auto t_original = std::make_tuple(1, (double)2.1f, 3);
-    auto t_transformed = tupleutils::tuple_transform_each<transform_to_string>(t_original);
+    auto t_transformed = tupleutils::tuple_transform_each_const<transform_to_string>(t_original);
     auto t_expected = std::make_tuple(std::string("1"), std::string("2"), std::string("3"));
 
     static_assert(std::tuple_size<decltype(t_transformed)>::value == 3,
@@ -137,7 +138,7 @@ void test_tuple_type_transform_each_multiple_types()
 void test_tuple_transform_each_multiple_types()
 {
   auto t_original = std::make_tuple(1, (double)2.1f, std::string("3"));
-  auto t_transformed = tupleutils::tuple_transform_each<transform_to_something>(t_original);
+  auto t_transformed = tupleutils::tuple_transform_each_const<transform_to_something>(t_original);
   auto t_expected = std::make_tuple(std::string("1"), '2', 3);
 
   static_assert(std::tuple_size<decltype(t_transformed)>::value == 3,
@@ -151,6 +152,41 @@ void test_tuple_transform_each_multiple_types()
     "unexpected transform_each()ed tuple type");
 }
 
+
+
+template <class T_element_from>
+class transform_each_nonconst
+{
+public:
+  static
+  int
+  transform(T_element_from& from) {
+    from *= 2;
+    //Or, for instance, call a non-const method on from.
+
+    return from * 10;
+  } 
+};
+
+void test_tuple_transform_each_nonconst()
+{
+  auto t = std::make_tuple(1, 2, 3);
+  auto t_transformed = tupleutils::tuple_transform_each<transform_each_nonconst>(t);
+  std::cout << std::get<0>(t) << std::endl;
+
+  //Check that t was changed:
+  std::cout << "debug: " << std::get<0>(t) << std::endl;
+  assert(std::get<0>(t) == 2);
+  assert(std::get<1>(t) == 4);
+  assert(std::get<2>(t) == 6);
+
+  //Check that t_transformed has the expected values:
+  assert(std::get<0>(t_transformed) == 10);
+  assert(std::get<1>(t_transformed) == 20);
+  assert(std::get<2>(t_transformed) == 30);
+}
+
+
 int main()
 {
   test_tuple_type_transform_each_same_types();
@@ -158,6 +194,8 @@ int main()
 
   test_tuple_transform_each_same_types();
   test_tuple_transform_each_multiple_types();
+
+  test_tuple_transform_each_nonconst();
       
   return EXIT_SUCCESS;
 }

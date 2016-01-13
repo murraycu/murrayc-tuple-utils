@@ -89,16 +89,14 @@ namespace {
 template<template<typename> class T_transformer, std::size_t index>
 struct tuple_transform_each_impl
 {
+  //TODO: Avoid the need to pass t_original all the way into the recursion?
   template<typename T>
   static
   decltype(auto)
-  tuple_transform_each(T& t) {
+  tuple_transform_each(T& t, T& t_original) {
     using element_type = typename std::tuple_element<index, T>::type;
 
-    //TODO: "from" is actually an element in a _copy_ of part of the tuple,
-    //create by a parent call of tuple_transform_each().
-    //It is not the element in the original tuple.
-    auto& from = std::get<index>(t);
+    auto& from = std::get<index>(t_original);
     const auto element = T_transformer<element_type>::transform(from);
     const auto t_element = std::make_tuple(element);
     
@@ -106,13 +104,18 @@ struct tuple_transform_each_impl
 
     constexpr auto size = std::tuple_size<T>::value;
 
-    //TODO: see above. t_end will have copies of the elements, not the actual elements.
+    //t_end's elements will be copies of the elements in t, so this method's
+    //caller won't see the changes made in the subsequent call of
+    //tuple_transform_each() on those copies. That's why we pass t_original
+    //through too, so we can modify that directly.
+    //the const version (tuple_transform_each_const()) doesn't have to worry
+    //about this, though avoiding copying would be more efficient.
     const auto t_end = tuple_end<size - index - 1>(t);
 
     auto t_with_transformed_element =
       std::tuple_cat(t_start, t_element, t_end);
     return tuple_transform_each_impl<T_transformer, index - 1>::tuple_transform_each(
-      t_with_transformed_element);
+      t_with_transformed_element, t_original);
   }
 };
 
@@ -122,11 +125,11 @@ struct tuple_transform_each_impl<T_transformer, 0>
   template<typename T>
   static
   decltype(auto)
-  tuple_transform_each(T& t) {
+  tuple_transform_each(T& t, T& t_original) {
     constexpr std::size_t index = 0;
 
     using element_type = typename std::tuple_element<index, T>::type;
-    const auto element = T_transformer<element_type>::transform(std::get<index>(t));
+    const auto element = T_transformer<element_type>::transform(std::get<index>(t_original));
     const auto tuple_element = std::make_tuple(element);
     const auto tuple_rest = tuple_cdr(t);
     return std::tuple_cat(tuple_element, tuple_rest);
@@ -143,7 +146,7 @@ template<template<typename> class T_transformer, typename T>
 decltype(auto)
 tuple_transform_each(T& t) {
   constexpr auto size = std::tuple_size<std::remove_reference_t<T>>::value;
-  return tuple_transform_each_impl<T_transformer, size - 1>::tuple_transform_each(t);
+  return tuple_transform_each_impl<T_transformer, size - 1>::tuple_transform_each(t, t);
 }
 
 } //namespace tupleutils

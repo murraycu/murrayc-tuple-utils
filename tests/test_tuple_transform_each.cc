@@ -19,8 +19,6 @@
 #include <utility>
 #include <cstdlib>
 #include <cassert>
-//#include <typeinfo>
-#include <iostream>
 
 template <class T_element_from>
 class transform_to_string
@@ -172,18 +170,16 @@ void test_tuple_transform_each_nonconst()
 {
   auto t = std::make_tuple(1, 2, 3);
   auto t_transformed = tupleutils::tuple_transform_each<transform_each_nonconst>(t);
-  std::cout << std::get<0>(t) << std::endl;
 
-  //Check that t was changed:
-  std::cout << "debug: " << std::get<0>(t) << std::endl;
+  //Check that t was changed (from * 2):
   assert(std::get<0>(t) == 2);
   assert(std::get<1>(t) == 4);
   assert(std::get<2>(t) == 6);
 
-  //Check that t_transformed has the expected values:
-  assert(std::get<0>(t_transformed) == 10);
-  assert(std::get<1>(t_transformed) == 20);
-  assert(std::get<2>(t_transformed) == 30);
+  //Check that t_transformed has the expected values ( from * 2 * 10):
+  assert(std::get<0>(t_transformed) == 20);
+  assert(std::get<1>(t_transformed) == 40);
+  assert(std::get<2>(t_transformed) == 60);
 }
 
 

@@ -34,7 +34,7 @@ struct tuple_for_each_impl
   template<typename T>
   static
   void
-  tuple_for_each(T t, T_extras... extras) {
+  tuple_for_each(T& t, T_extras... extras) {
     using element_type = typename std::tuple_element<index, T>::type;
     T_visitor<element_type>::visit(std::get<index>(t), extras...);
 
@@ -48,7 +48,7 @@ struct tuple_for_each_impl<T_visitor, 0, T_extras...>
   template<typename T>
   static
   void
-  tuple_for_each(T t, T_extras... extras) {
+  tuple_for_each(T& t, T_extras... extras) {
     constexpr std::size_t index = 0;
 
     using element_type = typename std::tuple_element<index, T>::type;
@@ -57,6 +57,10 @@ struct tuple_for_each_impl<T_visitor, 0, T_extras...>
 };
 
 } //anonymous namespace
+
+//TODO: Combine tuple_for_each() and tuple_for_each_const() in one template,
+//or at least different specializations of templates.
+//It must be possible. murrayc.
 
 /**
  * Get a tuple with each element having the transformed value of the element
@@ -70,8 +74,8 @@ struct tuple_for_each_impl<T_visitor, 0, T_extras...>
  */
 template<template<typename> class T_visitor, typename T, typename... T_extras>
 void
-tuple_for_each(T t, T_extras... extras) {
-  constexpr auto size = std::tuple_size<typename std::remove_reference<T>::type>::value; 
+tuple_for_each(T& t, T_extras... extras) {
+  constexpr auto size = std::tuple_size<std::remove_reference_t<T>>::value;
   tuple_for_each_impl<T_visitor, size - 1, T_extras...>::tuple_for_each(t, extras...);
 }
 

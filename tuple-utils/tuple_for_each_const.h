@@ -17,11 +17,7 @@
 #ifndef _MURRAYC_TUPLE_UTILS_TUPLE_FOR_EACH_CONST_H_
 #define _MURRAYC_TUPLE_UTILS_TUPLE_FOR_EACH_CONST_H_
 
-#include <tuple-utils/tuple_cat.h>
-#include <tuple-utils/tuple_cdr.h>
-#include <tuple-utils/tuple_start.h>
-#include <tuple-utils/tuple_end.h>
-#include <type_traits>
+#include <tuple>
 
 namespace tupleutils
 {

@@ -14,27 +14,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
 
+#include <cassert>
+#include <cstdlib>
 #include <tuple-utils/tuple_for_each.h>
 #include <tuple-utils/tuple_for_each_const.h>
 #include <utility>
-#include <cstdlib>
-#include <cassert>
 //#include <typeinfo>
 #include <iostream>
 
 template <class T_element_from>
-class for_each_simple
-{
+class for_each_simple {
 public:
-  static
-  void
+  static void
   visit(const T_element_from& from) {
     std::cout << "for_each_simple(): " << std::to_string(from) << std::endl;
-  } 
+  }
 };
 
-void test_tuple_for_each_same_types()
-{
+void
+test_tuple_for_each_same_types() {
   {
     auto t_original = std::make_tuple(1, 2, 3);
     tupleutils::tuple_for_each_const<for_each_simple>(t_original);
@@ -47,116 +45,108 @@ void test_tuple_for_each_same_types()
 }
 
 template <class T_element_from>
-class for_each_simple_with_extras
-{
+class for_each_simple_with_extras {
 public:
-  static
-  void
+  static void
   visit(const T_element_from& from, int extra1, const std::string& extra2) {
-    std::cout << "for_each_simple_with_extras(): from=" <<
-      std::to_string(from) <<
-      ", extra1: " << extra1 <<
-      ", extra2: " << extra2 << std::endl;
+    std::cout << "for_each_simple_with_extras(): from=" << std::to_string(from)
+              << ", extra1: " << extra1 << ", extra2: " << extra2 << std::endl;
   }
 };
 
-void test_tuple_for_each_same_types_with_extras()
-{
+void
+test_tuple_for_each_same_types_with_extras() {
   {
     auto t_original = std::make_tuple(1, (double)2.1f, 3);
-    tupleutils::tuple_for_each_const<for_each_simple_with_extras>(t_original, 89, "eightynine");
+    tupleutils::tuple_for_each_const<for_each_simple_with_extras>(
+      t_original, 89, "eightynine");
   }
 }
 
 template <class T_element_from>
-class for_each_simple_with_nonconst_extras
-{
+class for_each_simple_with_nonconst_extras {
 public:
-  static
-  void
+  static void
   visit(const T_element_from& from, int& extra) {
     extra += (int)from;
   }
 };
 
-void test_tuple_for_each_same_types_with_nonconst_extras()
-{
+void
+test_tuple_for_each_same_types_with_nonconst_extras() {
   {
     auto t_original = std::make_tuple(1, (double)2.1f, 3);
     int extra = 0;
 
-    //TODO: avoid the need to specify the tuple type (decltype(t_original).
-    //  It can't be at the end (or can't it?) because we have T_extras... at the end.
-    //TODO: avoid the need to specify that the int should be passed by reference?
-    tupleutils::tuple_for_each_const<for_each_simple_with_nonconst_extras, decltype(t_original), int&>(t_original, extra);
-    //std::cout << "extra: " << extra << std::endl;
+    // TODO: avoid the need to specify the tuple type (decltype(t_original).
+    //  It can't be at the end (or can't it?) because we have T_extras... at the
+    //  end.
+    // TODO: avoid the need to specify that the int should be passed by
+    // reference?
+    tupleutils::tuple_for_each_const<for_each_simple_with_nonconst_extras,
+      decltype(t_original), int&>(t_original, extra);
+    // std::cout << "extra: " << extra << std::endl;
     assert(extra == 6);
   }
 }
 
-//The general template declaration.
-//We then provide specializations for each type,
-//so we can test having a different return value for each T_element_from type.
+// The general template declaration.
+// We then provide specializations for each type,
+// so we can test having a different return value for each T_element_from type.
 template <class T_element_from>
 class visitor_with_specializations;
 
-//An int will be converted to a std::string:
+// An int will be converted to a std::string:
 template <>
-class visitor_with_specializations<int>
-{
+class visitor_with_specializations<int> {
 public:
-  static
-  void
+  static void
   visit(const int& from) {
-    std::cout << "visitor_with_specializations::visit(): " << std::to_string(from) << std::endl;
-  } 
+    std::cout << "visitor_with_specializations::visit(): "
+              << std::to_string(from) << std::endl;
+  }
 };
 
-//A double will be converted to a char:
+// A double will be converted to a char:
 template <>
-class visitor_with_specializations<double>
-{
+class visitor_with_specializations<double> {
 public:
-  static
-  void
+  static void
   visit(const double& from) {
-    std::cout << "visitor_with_specializations::visit(): " << std::to_string(from)[0] << std::endl;
-  } 
+    std::cout << "visitor_with_specializations::visit(): "
+              << std::to_string(from)[0] << std::endl;
+  }
 };
 
-//A std::string will be converted to an int:
+// A std::string will be converted to an int:
 template <>
-class visitor_with_specializations<std::string>
-{
+class visitor_with_specializations<std::string> {
 public:
-  static
-  void
+  static void
   visit(const std::string& from) {
-    std::cout << "visitor_with_specializations::visit(): " << std::stoi(from) << std::endl;
-  } 
+    std::cout << "visitor_with_specializations::visit(): " << std::stoi(from)
+              << std::endl;
+  }
 };
 
-void test_tuple_for_each_multiple_types()
-{
+void
+test_tuple_for_each_multiple_types() {
   auto t_original = std::make_tuple(1, (double)2.1f, std::string("3"));
   tupleutils::tuple_for_each_const<visitor_with_specializations>(t_original);
 }
 
-
 template <class T_element_from>
-class for_each_nonconst
-{
+class for_each_nonconst {
 public:
-  static
-  void
+  static void
   visit(T_element_from& from) {
     from *= 2;
-    //Or, for instance, call a non-const method on from.
-  } 
+    // Or, for instance, call a non-const method on from.
+  }
 };
 
-void test_tuple_for_each_nonconst()
-{
+void
+test_tuple_for_each_nonconst() {
   auto t = std::make_tuple(1, 2, 3);
   tupleutils::tuple_for_each<for_each_nonconst, decltype(t)&>(t);
   std::cout << std::get<0>(t) << std::endl;
@@ -165,8 +155,8 @@ void test_tuple_for_each_nonconst()
   assert(std::get<2>(t) == 6);
 }
 
-int main()
-{
+int
+main() {
   test_tuple_for_each_same_types();
   test_tuple_for_each_same_types_with_extras();
   test_tuple_for_each_same_types_with_nonconst_extras();
@@ -174,6 +164,6 @@ int main()
   test_tuple_for_each_multiple_types();
 
   test_tuple_for_each_nonconst();
-      
+
   return EXIT_SUCCESS;
 }

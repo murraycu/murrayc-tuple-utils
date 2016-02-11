@@ -14,17 +14,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
 
-#include <tuple-utils/tuple_print.h>
-#include <cstdlib>
 #include <cassert>
+#include <cstdlib>
 #include <sstream>
+#include <tuple-utils/tuple_print.h>
 
-int main()
-{
+int
+main() {
   std::ostringstream strstream;
   const auto t = std::make_tuple(1, 2, "three");
   tupleutils::tuple_print(t, strstream);
-  assert("1, 2, three" == strstream.str()); 
-      
+  assert("1, 2, three" == strstream.str());
+
   return EXIT_SUCCESS;
 }

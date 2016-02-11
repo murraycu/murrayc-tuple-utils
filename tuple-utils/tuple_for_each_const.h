@@ -19,31 +19,28 @@
 
 #include <tuple>
 
-namespace tupleutils
-{
+namespace tupleutils {
 
 namespace {
 
-template<template<typename> class T_visitor, std::size_t index, typename... T_extras>
-struct tuple_for_each_const_impl
-{
-  template<typename T>
-  static
-  void
+template <template <typename> class T_visitor, std::size_t index,
+  typename... T_extras>
+struct tuple_for_each_const_impl {
+  template <typename T>
+  static void
   tuple_for_each_const(const T& t, T_extras... extras) {
     using element_type = typename std::tuple_element<index, T>::type;
     T_visitor<element_type>::visit(std::get<index>(t), extras...);
 
-    tuple_for_each_const_impl<T_visitor, index - 1, T_extras...>::tuple_for_each_const(t, extras...);
+    tuple_for_each_const_impl<T_visitor, index - 1,
+      T_extras...>::tuple_for_each_const(t, extras...);
   }
 };
 
-template<template<typename> class T_visitor, typename... T_extras>
-struct tuple_for_each_const_impl<T_visitor, 0, T_extras...>
-{
-  template<typename T>
-  static
-  void
+template <template <typename> class T_visitor, typename... T_extras>
+struct tuple_for_each_const_impl<T_visitor, 0, T_extras...> {
+  template <typename T>
+  static void
   tuple_for_each_const(const T& t, T_extras... extras) {
     constexpr std::size_t index = 0;
 
@@ -52,7 +49,7 @@ struct tuple_for_each_const_impl<T_visitor, 0, T_extras...>
   }
 };
 
-} //anonymous namespace
+} // anonymous namespace
 
 /**
  * Get a tuple with each element having the transformed value of the element
@@ -60,17 +57,19 @@ struct tuple_for_each_const_impl<T_visitor, 0, T_extras...>
  *
  * @tparam T_visitor should be a template that has a static visit() method.
  * @tparam T the tuple type.
- * @tparam T_extras the types of any extra arguments to pass to @e T_Visitor's visit() method.
+ * @tparam T_extras the types of any extra arguments to pass to @e T_Visitor's
+ * visit() method.
  * @param t The tuple whose elements should be visited.
- * @param extras Any extra arguments to pass to @e T_Visitor's visit() method. 
+ * @param extras Any extra arguments to pass to @e T_Visitor's visit() method.
  */
-template<template<typename> class T_visitor, typename T, typename... T_extras>
+template <template <typename> class T_visitor, typename T, typename... T_extras>
 void
 tuple_for_each_const(const T& t, T_extras... extras) {
-  constexpr auto size = std::tuple_size<T>::value; 
-  tuple_for_each_const_impl<T_visitor, size - 1, T_extras...>::tuple_for_each_const(t, extras...);
+  constexpr auto size = std::tuple_size<T>::value;
+  tuple_for_each_const_impl<T_visitor, size - 1,
+    T_extras...>::tuple_for_each_const(t, extras...);
 }
 
-} //namespace tupleutils
+} // namespace tupleutils
 
 #endif //_MURRAYC_TUPLE_UTILS_TUPLE_FOR_EACH_CONST_H_

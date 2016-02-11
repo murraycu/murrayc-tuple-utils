@@ -14,63 +14,68 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
 
-#include <tuple-utils/tuple_subset.h>
-#include <cstdlib>
 #include <cassert>
+#include <cstdlib>
+#include <tuple-utils/tuple_subset.h>
 
-void test_tuple_type_subset()
-{
+void
+test_tuple_type_subset() {
   {
     using type_tuple = std::tuple<int, short, double>;
-    using type_tuple_subset = tupleutils::tuple_type_subset<type_tuple, 0, 1>::type;
+    using type_tuple_subset =
+      tupleutils::tuple_type_subset<type_tuple, 0, 1>::type;
     using type_tuple_expected = std::tuple<int>;
 
     static_assert(std::is_same<type_tuple_subset, type_tuple_expected>::value,
-        "unexpected type_tuple_subset type");
+      "unexpected type_tuple_subset type");
   }
 
   {
     using type_tuple = std::tuple<int, short, double>;
-    using type_tuple_subset = tupleutils::tuple_type_subset<type_tuple, 0, 2>::type;
+    using type_tuple_subset =
+      tupleutils::tuple_type_subset<type_tuple, 0, 2>::type;
     using type_tuple_expected = std::tuple<int, short>;
 
     static_assert(std::is_same<type_tuple_subset, type_tuple_expected>::value,
-        "unexpected type_tuple_subset type");
+      "unexpected type_tuple_subset type");
   }
 
   {
     using type_tuple = std::tuple<int, short, double>;
-    using type_tuple_subset = tupleutils::tuple_type_subset<type_tuple, 0, 3>::type;
+    using type_tuple_subset =
+      tupleutils::tuple_type_subset<type_tuple, 0, 3>::type;
     using type_tuple_expected = std::tuple<int, short, double>;
 
     static_assert(std::is_same<type_tuple_subset, type_tuple_expected>::value,
-        "unexpected type_tuple_subset type");
+      "unexpected type_tuple_subset type");
   }
 
   {
     using type_tuple = std::tuple<int, short, double>;
-    using type_tuple_subset = tupleutils::tuple_type_subset<type_tuple, 1, 2>::type;
+    using type_tuple_subset =
+      tupleutils::tuple_type_subset<type_tuple, 1, 2>::type;
     using type_tuple_expected = std::tuple<short, double>;
 
     static_assert(std::is_same<type_tuple_subset, type_tuple_expected>::value,
-        "unexpected type_tuple_subset type");
+      "unexpected type_tuple_subset type");
   }
 
   {
     using type_tuple = std::tuple<int, short, double>;
-    using type_tuple_subset = tupleutils::tuple_type_subset<type_tuple, 2, 1>::type;
+    using type_tuple_subset =
+      tupleutils::tuple_type_subset<type_tuple, 2, 1>::type;
     using type_tuple_expected = std::tuple<double>;
 
     static_assert(std::is_same<type_tuple_subset, type_tuple_expected>::value,
-        "unexpected type_tuple_subset type");
+      "unexpected type_tuple_subset type");
   }
 }
 
-void test_tuple_subset()
-{
+void
+test_tuple_subset() {
   {
-    auto t_original = std::make_tuple(nullptr, std::string("hello"),
-      std::string("world"));
+    auto t_original =
+      std::make_tuple(nullptr, std::string("hello"), std::string("world"));
     auto t_subset = tupleutils::tuple_subset<0, 3>(t_original);
 
     static_assert(std::tuple_size<decltype(t_subset)>::value == 3,
@@ -85,13 +90,13 @@ void test_tuple_subset()
   }
 
   {
-    auto t_original = std::make_tuple(nullptr, std::string("hello"),
-      std::string("world"));
+    auto t_original =
+      std::make_tuple(nullptr, std::string("hello"), std::string("world"));
     auto t_subset = tupleutils::tuple_subset<0, 2>(t_original);
 
     static_assert(std::tuple_size<decltype(t_subset)>::value == 2,
       "unexpected tuple_subset()ed tuple size.");
-      
+
     assert(std::get<0>(t_subset) == nullptr);
     assert(std::get<1>(t_subset) == "hello");
 
@@ -101,8 +106,8 @@ void test_tuple_subset()
   }
 
   {
-    auto t_original = std::make_tuple(nullptr, std::string("hello"),
-      std::string("world"));
+    auto t_original =
+      std::make_tuple(nullptr, std::string("hello"), std::string("world"));
     auto t_subset = tupleutils::tuple_subset<0, 1>(t_original);
 
     static_assert(std::tuple_size<decltype(t_subset)>::value == 1,
@@ -116,8 +121,8 @@ void test_tuple_subset()
   }
 
   {
-    auto t_original = std::make_tuple(nullptr, std::string("hello"),
-      std::string("world"));
+    auto t_original =
+      std::make_tuple(nullptr, std::string("hello"), std::string("world"));
     auto t_subset = tupleutils::tuple_subset<1, 1>(t_original);
 
     static_assert(std::tuple_size<decltype(t_subset)>::value == 1,
@@ -131,10 +136,10 @@ void test_tuple_subset()
   }
 }
 
-int main()
-{
+int
+main() {
   test_tuple_type_subset();
   test_tuple_subset();
-      
+
   return EXIT_SUCCESS;
 }

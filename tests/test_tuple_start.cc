@@ -14,19 +14,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
 
-#include <tuple-utils/tuple_start.h>
-#include <cstdlib>
 #include <cassert>
+#include <cstdlib>
+#include <tuple-utils/tuple_start.h>
 
-void test_tuple_type_start()
-{
+void
+test_tuple_type_start() {
   {
     using type_tuple = std::tuple<int, short, double>;
     using type_tuple_start = tupleutils::tuple_type_start<type_tuple, 1>::type;
     using type_tuple_expected = std::tuple<int>;
 
     static_assert(std::is_same<type_tuple_start, type_tuple_expected>::value,
-        "unexpected type_tuple_start type");
+      "unexpected type_tuple_start type");
   }
 
   {
@@ -35,7 +35,7 @@ void test_tuple_type_start()
     using type_tuple_expected = std::tuple<int, short>;
 
     static_assert(std::is_same<type_tuple_start, type_tuple_expected>::value,
-        "unexpected type_tuple_start type");
+      "unexpected type_tuple_start type");
   }
 
   {
@@ -44,15 +44,15 @@ void test_tuple_type_start()
     using type_tuple_expected = std::tuple<int, short, double>;
 
     static_assert(std::is_same<type_tuple_start, type_tuple_expected>::value,
-        "unexpected type_tuple_start type");
+      "unexpected type_tuple_start type");
   }
 }
 
-void test_tuple_start()
-{
+void
+test_tuple_start() {
   {
-    auto t_original = std::make_tuple(nullptr, std::string("hello"),
-      std::string("world"));
+    auto t_original =
+      std::make_tuple(nullptr, std::string("hello"), std::string("world"));
     auto t_prefix = tupleutils::tuple_start<3>(t_original);
 
     static_assert(std::tuple_size<decltype(t_prefix)>::value == 3,
@@ -67,13 +67,13 @@ void test_tuple_start()
   }
 
   {
-    auto t_original = std::make_tuple(nullptr, std::string("hello"),
-      std::string("world"));
+    auto t_original =
+      std::make_tuple(nullptr, std::string("hello"), std::string("world"));
     auto t_prefix = tupleutils::tuple_start<2>(t_original);
 
     static_assert(std::tuple_size<decltype(t_prefix)>::value == 2,
       "unexpected tuple_start()ed tuple size.");
-      
+
     assert(std::get<0>(t_prefix) == nullptr);
     assert(std::get<1>(t_prefix) == "hello");
 
@@ -83,8 +83,8 @@ void test_tuple_start()
   }
 
   {
-    auto t_original = std::make_tuple(nullptr, std::string("hello"),
-      std::string("world"));
+    auto t_original =
+      std::make_tuple(nullptr, std::string("hello"), std::string("world"));
     auto t_prefix = tupleutils::tuple_start<1>(t_original);
 
     static_assert(std::tuple_size<decltype(t_prefix)>::value == 1,
@@ -98,8 +98,8 @@ void test_tuple_start()
   }
 }
 
-int main()
-{  
+int
+main() {
   test_tuple_type_start();
   test_tuple_start();
 }

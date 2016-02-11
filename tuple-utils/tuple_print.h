@@ -17,43 +17,45 @@
 #ifndef _MURRAYC_TUPLE_UTILS_TUPLE_PRINT_H
 #define _MURRAYC_TUPLE_UTILS_TUPLE_PRINT_H
 
-#include <tuple>
 #include <iostream>
+#include <tuple>
 
 namespace tupleutils {
 
-namespace { //anonymous namespace
+namespace { // anonymous namespace
 
 // Based on example code from here:
 // http://en.cppreference.com/w/cpp/utility/tuple/tuple_cat
 
-template<class T, std::size_t N>
+template <class T, std::size_t N>
 class TuplePrinter {
 public:
-  static void print(const T& t, std::ostream& output_stream) 
-  {
-    TuplePrinter<T, N-1>::print(t, output_stream);
-    output_stream << ", " << std::get<N-1>(t);
+  static void
+  print(const T& t, std::ostream& output_stream) {
+    TuplePrinter<T, N - 1>::print(t, output_stream);
+    output_stream << ", " << std::get<N - 1>(t);
   }
 };
 
-template<class T>
+template <class T>
 class TuplePrinter<T, 1> {
 public:
-  static void print(const T& t, std::ostream& output_stream)  {
+  static void
+  print(const T& t, std::ostream& output_stream) {
     output_stream << std::get<0>(t);
   }
 };
 
-} //anonymous namespace
+} // anonymous namespace
 
-//TODO: Take a const std::tuple<Args...>& instead,
-//to restrict the type allowed?
-template<class T>
-void tuple_print(const T& t, std::ostream& output_stream = std::cout) {
+// TODO: Take a const std::tuple<Args...>& instead,
+// to restrict the type allowed?
+template <class T>
+void
+tuple_print(const T& t, std::ostream& output_stream = std::cout) {
   TuplePrinter<T, std::tuple_size<T>::value>::print(t, output_stream);
 }
 
-} //namespace tupleutils
+} // namespace tupleutils
 
 #endif //_MURRAYC_TUPLE_UTILS_TUPLE_PRINT_H

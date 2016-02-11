@@ -18,6 +18,7 @@
 #include <cstdlib>
 #include <tuple-utils/tuple_cdr.h>
 #include <utility>
+#include <functional>
 
 void
 test_tuple_type_cdr() {
@@ -47,10 +48,29 @@ test_tuple_cdr() {
     "unexpected cdr()ed tuple type");
 }
 
+void
+test_tuple_cdr_stdref() {
+  std::string b = "yadda";
+  std::string c = "yaddayadda";
+  auto t_larger = std::make_tuple(1, std::ref(b), std::ref(c));
+
+  //std::cout << "debug: " << type(std::get<1>(t_larger)) << std::endl;
+
+  auto t_suffix = tupleutils::tuple_cdr(t_larger);
+  b = "hello";
+  c = "world";
+  //This works, but it's not what we are testing here:
+  //assert(std::get<1>(t_larger) == "hello");
+
+  assert(std::get<0>(t_suffix) == "hello");
+  assert(std::get<1>(t_suffix) == "world");
+}
+
 int
 main() {
   test_tuple_type_cdr();
   test_tuple_cdr();
+  test_tuple_cdr_stdref();
 
   return EXIT_SUCCESS;
 }

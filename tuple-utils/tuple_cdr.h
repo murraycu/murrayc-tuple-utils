@@ -47,8 +47,8 @@ namespace {
 
 template <typename T, std::size_t I0, std::size_t... I>
 decltype(auto)
-tuple_cdr_impl(const T& t, std::index_sequence<I0, I...>) {
-  return std::make_tuple(std::get<I>(t)...);
+tuple_cdr_impl(T&& t, std::index_sequence<I0, I...>) {
+  return std::make_tuple(std::get<I>(std::forward<T>(t))...);
 }
 
 } // anonymous namespace
@@ -59,10 +59,13 @@ tuple_cdr_impl(const T& t, std::index_sequence<I0, I...>) {
  */
 template <typename T>
 decltype(auto)
-tuple_cdr(const T& t) {
-  constexpr auto size = std::tuple_size<T>::value;
+tuple_cdr(T&& t) {
+  //We use std::decay_t<> because otherwise the type is not fully defined,
+  //and we only care about the size anyway.
+  constexpr auto size = std::tuple_size<std::decay_t<T>>::value;
+
   const auto seq = std::make_index_sequence<size>{};
-  return tuple_cdr_impl(t, seq);
+  return tuple_cdr_impl(std::forward<T>(t), seq);
 }
 
 } // namespace tupleutils

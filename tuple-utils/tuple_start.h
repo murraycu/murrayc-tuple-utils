@@ -49,8 +49,13 @@ struct tuple_start_impl;
 template <typename T, std::size_t... I>
 struct tuple_start_impl<T, std::index_sequence<I...>> {
   static decltype(auto)
-  tuple_start(const T& t) {
-    return std::make_tuple(std::get<I>(t)...);
+  tuple_start(T&& t) {
+    constexpr auto size = std::tuple_size<std::decay_t<T>>::value;
+    constexpr auto len = sizeof...(I);
+    static_assert(len <= size, "The tuple size must be less than or equal to the length.");
+
+    using start = typename tuple_type_start<std::decay_t<T>, len>::type;
+    return start(std::get<I>(std::forward<T>(t))...);
   }
 };
 
@@ -61,8 +66,12 @@ struct tuple_start_impl<T, std::index_sequence<I...>> {
  */
 template <std::size_t len, typename T>
 decltype(auto) // typename tuple_type_end<T, len>::type
-  tuple_start(const T& t) {
-  return tuple_start_impl<T, std::make_index_sequence<len>>::tuple_start(t);
+  tuple_start(T&& t) {
+  constexpr auto size = std::tuple_size<std::decay_t<T>>::value;
+  static_assert(len <= size, "The tuple size must be less than or equal to the length.");
+
+  return tuple_start_impl<T, std::make_index_sequence<len>>::tuple_start(
+    std::forward<T>(t));
 }
 
 } // namespace tupleutils;

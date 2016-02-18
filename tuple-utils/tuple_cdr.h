@@ -45,9 +45,10 @@ struct tuple_type_cdr : tuple_type_cdr_impl<T,
 
 namespace detail {
 
-template <typename T, std::size_t I0, std::size_t... I>
+template <typename T, std::size_t... I>
 decltype(auto)
-tuple_cdr_impl(T&& t, std::index_sequence<I0, I...>) {
+tuple_cdr_impl(T&& t, std::index_sequence<0, I...>)
+{
   using cdr = typename tuple_type_cdr<std::decay_t<T>>::type;
   return cdr(std::get<I>(std::forward<T>(t))...);
 }
@@ -64,8 +65,9 @@ tuple_cdr(T&& t) {
   //We use std::decay_t<> because tuple_size is not defined for references.
   constexpr auto size = std::tuple_size<std::decay_t<T>>::value;
 
-  const auto seq = std::make_index_sequence<size>{};
-  return tuple_cdr_impl(std::forward<T>(t), seq);
+  static_assert(size != 0, "tuple size must be non-zero");
+  using seq = std::make_index_sequence<size>;
+  return detail::tuple_cdr_impl(std::forward<T>(t), seq{});
 }
 
 } // namespace tupleutils

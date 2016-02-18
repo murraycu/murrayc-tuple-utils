@@ -43,7 +43,7 @@ struct tuple_type_cdr : tuple_type_cdr_impl<T,
                           std::make_index_sequence<std::tuple_size<T>::value>> {
 };
 
-namespace {
+namespace detail {
 
 template <typename T, std::size_t I0, std::size_t... I>
 decltype(auto)
@@ -52,7 +52,7 @@ tuple_cdr_impl(T&& t, std::index_sequence<I0, I...>) {
   return cdr(std::get<I>(std::forward<T>(t))...);
 }
 
-} // anonymous namespace
+} // detail namespace
 
 /**
  * Get the a tuple without the first item.

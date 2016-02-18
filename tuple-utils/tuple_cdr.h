@@ -48,7 +48,8 @@ namespace {
 template <typename T, std::size_t I0, std::size_t... I>
 decltype(auto)
 tuple_cdr_impl(T&& t, std::index_sequence<I0, I...>) {
-  return std::make_tuple(std::get<I>(std::forward<T>(t))...);
+  using cdr = typename tuple_type_cdr<std::decay_t<T>>::type;
+  return cdr(std::get<I>(std::forward<T>(t))...);
 }
 
 } // anonymous namespace

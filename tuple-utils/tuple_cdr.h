@@ -23,24 +23,17 @@
 
 namespace tupleutils {
 
-namespace {
-
-template <typename T, typename Seq>
-struct tuple_type_cdr_impl;
-
-template <typename T, std::size_t I0, std::size_t... I>
-struct tuple_type_cdr_impl<T, std::index_sequence<I0, I...>> {
-  using type = std::tuple<typename std::tuple_element<I, T>::type...>;
-};
-
-} // anonymous namespace
-
 /**
  * Get the type of a tuple without the first item.
  */
 template <typename T>
-struct tuple_type_cdr : tuple_type_cdr_impl<T,
-                          std::make_index_sequence<std::tuple_size<T>::value>> {
+struct tuple_type_cdr; // primary template is not defined
+
+// Partial specialization for tuples of at least one element:
+template <typename H, typename... T>
+struct tuple_type_cdr<std::tuple<H, T...>>
+{
+  using type = std::tuple<T...>;
 };
 
 namespace detail {

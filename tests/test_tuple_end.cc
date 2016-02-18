@@ -17,6 +17,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <tuple-utils/tuple_end.h>
+#include <functional>
 
 void
 test_tuple_type_end() {
@@ -104,10 +105,28 @@ test_tuple_end() {
   }
 }
 
+void
+test_tuple_end_stdref() {
+  std::string c = "yadda";
+  std::string d = "yaddayadda";
+  auto t_larger = std::make_tuple(1, 2, std::ref(c), std::ref(d));
+
+  auto t_suffix = tupleutils::tuple_end<2>(t_larger);
+  c = "hello";
+  d = "world";
+  //This works, but it's not what we are testing here:
+  //assert(std::get<0>(t_larger) == "hello");
+
+  assert(std::get<0>(t_suffix) == "hello");
+  assert(std::get<1>(t_suffix) == "world");
+}
+
+
 int
 main() {
   test_tuple_type_end();
   test_tuple_end();
+  test_tuple_end_stdref();
 
   return EXIT_SUCCESS;
 }

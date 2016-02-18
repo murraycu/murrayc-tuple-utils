@@ -17,7 +17,6 @@
 #include <cassert>
 #include <cstdlib>
 #include <tuple-utils/tuple_for_each.h>
-#include <tuple-utils/tuple_for_each_const.h>
 #include <utility>
 //#include <typeinfo>
 #include <iostream>
@@ -35,12 +34,12 @@ void
 test_tuple_for_each_same_types() {
   {
     auto t_original = std::make_tuple(1, 2, 3);
-    tupleutils::tuple_for_each_const<for_each_simple>(t_original);
+    tupleutils::tuple_for_each<for_each_simple>(t_original);
   }
 
   {
     auto t_original = std::make_tuple(1, (double)2.1f, 3);
-    tupleutils::tuple_for_each_const<for_each_simple>(t_original);
+    tupleutils::tuple_for_each<for_each_simple>(t_original);
   }
 }
 
@@ -58,7 +57,7 @@ void
 test_tuple_for_each_same_types_with_extras() {
   {
     auto t_original = std::make_tuple(1, (double)2.1f, 3);
-    tupleutils::tuple_for_each_const<for_each_simple_with_extras>(
+    tupleutils::tuple_for_each<for_each_simple_with_extras>(
       t_original, 89, "eightynine");
   }
 }
@@ -78,13 +77,7 @@ test_tuple_for_each_same_types_with_nonconst_extras() {
     auto t_original = std::make_tuple(1, (double)2.1f, 3);
     int extra = 0;
 
-    // TODO: avoid the need to specify the tuple type (decltype(t_original).
-    //  It can't be at the end (or can't it?) because we have T_extras... at the
-    //  end.
-    // TODO: avoid the need to specify that the int should be passed by
-    // reference?
-    tupleutils::tuple_for_each_const<for_each_simple_with_nonconst_extras,
-      decltype(t_original), int&>(t_original, extra);
+    tupleutils::tuple_for_each<for_each_simple_with_nonconst_extras>(t_original, extra);
     // std::cout << "extra: " << extra << std::endl;
     assert(extra == 6);
   }
@@ -132,7 +125,7 @@ public:
 void
 test_tuple_for_each_multiple_types() {
   auto t_original = std::make_tuple(1, (double)2.1f, std::string("3"));
-  tupleutils::tuple_for_each_const<visitor_with_specializations>(t_original);
+  tupleutils::tuple_for_each<visitor_with_specializations>(t_original);
 }
 
 template <class T_element_from>

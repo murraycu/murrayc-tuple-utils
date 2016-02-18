@@ -61,8 +61,7 @@ tuple_cdr_impl(T&& t, std::index_sequence<I0, I...>) {
 template <typename T>
 decltype(auto)
 tuple_cdr(T&& t) {
-  //We use std::decay_t<> because otherwise the type is not fully defined,
-  //and we only care about the size anyway.
+  //We use std::decay_t<> because tuple_size is not defined for references.
   constexpr auto size = std::tuple_size<std::decay_t<T>>::value;
 
   const auto seq = std::make_index_sequence<size>{};

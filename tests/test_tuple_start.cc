@@ -17,6 +17,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <tuple-utils/tuple_start.h>
+#include <functional>
 
 void
 test_tuple_type_start() {
@@ -98,8 +99,25 @@ test_tuple_start() {
   }
 }
 
+void
+test_tuple_start_stdref() {
+  std::string a = "yadda";
+  std::string b = "yaddayadda";
+  auto t_larger = std::make_tuple(std::ref(a), std::ref(b), 1);
+
+  auto t_prefix = tupleutils::tuple_start<2>(t_larger);
+  a = "hello";
+  b = "world";
+  //This works, but it's not what we are testing here:
+  //assert(std::get<0>(t_larger) == "hello");
+
+  assert(std::get<0>(t_prefix) == "hello");
+  assert(std::get<1>(t_prefix) == "world");
+}
+
 int
 main() {
   test_tuple_type_start();
   test_tuple_start();
+  test_tuple_start_stdref();
 }

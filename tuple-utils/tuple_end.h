@@ -25,7 +25,7 @@ namespace {
 
 template <typename T, std::size_t remove_from_start>
 struct tuple_type_end_impl {
-  using type = typename tuple_type_end_impl<typename tuple_type_cdr<T>::type,
+  using type = typename tuple_type_end_impl<typename tuple_type_cdr<std::decay_t<T>>::type,
     remove_from_start - 1>::type;
 };
 
@@ -47,32 +47,45 @@ namespace {
 
 template <typename T, std::size_t remove_from_start>
 struct tuple_end_impl {
-  static decltype(
-    auto) // typename tuple_type_end<T, size - remove_from_start>::type
-    tuple_end(const T& t) {
-    return tuple_end_impl<typename tuple_type_cdr<T>::type,
-      remove_from_start - 1>::tuple_end(tuple_cdr(t));
+  static decltype(auto) // typename tuple_type_end<T, size - remove_from_start>::type
+  tuple_end(T&& t) {
+    static_assert(remove_from_start > 0, "remove_from_start must be more than zero.");
+
+    using cdr = typename tuple_type_cdr<std::decay_t<T>>::type;
+    return tuple_end_impl<cdr, remove_from_start - 1>::tuple_end(
+      tuple_cdr(std::forward<T>(t)));
+  }
+};
+
+template <typename T>
+struct tuple_end_impl<T, 1> {
+  static decltype(auto)
+  tuple_end(T&& t) {
+    return tuple_cdr(std::forward<T>(t));
   }
 };
 
 template <typename T>
 struct tuple_end_impl<T, 0> {
-  static T
-  tuple_end(const T& t) {
-    return t;
+  static decltype(auto)
+  tuple_end(T&& t) {
+    return std::forward<T>(t);
   }
 };
 
 } // anonymous namespace
 
 /**
- * Get the ttuple with the last @a len items of the original.
+ * Get the tuple with the last @a len items of the original.
  */
 template <std::size_t len, typename T>
 decltype(auto) // typename tuple_type_end<T, len>::type
-  tuple_end(const T& t) {
-  constexpr auto size = std::tuple_size<T>::value;
-  return tuple_end_impl<T, size - len>::tuple_end(t);
+  tuple_end(T&& t) {
+  //We use std::decay_t<> because tuple_size is not defined for references.
+  constexpr auto size = std::tuple_size<std::decay_t<T>>::value;
+  static_assert(len <= size, "The tuple size must be less than or equal to the length.");
+  constexpr auto size_start = size - len;
+  return tuple_end_impl<T, size_start>::tuple_end(std::forward<T>(t));
 }
 
 } // namespace tupleutils;

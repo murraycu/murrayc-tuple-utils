@@ -20,6 +20,7 @@
 #include <utility>
 //#include <typeinfo>
 #include <iostream>
+#include <functional>
 
 template <class T_element_from>
 class for_each_simple {
@@ -148,6 +149,28 @@ test_tuple_for_each_nonconst() {
   assert(std::get<2>(t) == 6);
 }
 
+void
+test_tuple_for_each_stdref() {
+  {
+    int a = 1;
+    int b = 2;
+    int c = 3;
+    auto t_original = std::make_tuple(std::ref(a), std::ref(b), std::ref(c));
+    tupleutils::tuple_for_each<for_each_simple>(t_original);
+  }
+
+  {
+    int a = 1;
+    int b = 2;
+    int c = 3;
+    auto t_original = std::make_tuple(std::ref(a), std::ref(b), std::ref(c));
+    tupleutils::tuple_for_each<for_each_nonconst>(t_original);
+    assert(a == 2);
+    assert(b == 4);
+    assert(c == 6);
+  }
+}
+
 int
 main() {
   test_tuple_for_each_same_types();
@@ -157,6 +180,8 @@ main() {
   test_tuple_for_each_multiple_types();
 
   test_tuple_for_each_nonconst();
+  
+  test_tuple_for_each_stdref();
 
   return EXIT_SUCCESS;
 }

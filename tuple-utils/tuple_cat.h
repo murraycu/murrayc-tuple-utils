@@ -23,7 +23,7 @@
 
 namespace tupleutils {
 
-namespace {
+namespace detail {
 
 template <typename T1, typename T2, typename Seq1, typename Seq2>
 struct tuple_type_cat_impl;
@@ -35,14 +35,14 @@ struct tuple_type_cat_impl<T1, T2, std::index_sequence<I1...>,
     typename std::tuple_element<I2, T2>::type...>;
 };
 
-} // anonymous namespace
+} // detail namespace
 
 /**
  * Get the type of a tuple without the first item.
  */
 template <typename T1, typename T2>
 struct tuple_type_cat
-  : tuple_type_cat_impl<T1, T2,
+  : detail::tuple_type_cat_impl<T1, T2,
       std::make_index_sequence<std::tuple_size<T1>::value>,
       std::make_index_sequence<std::tuple_size<T2>::value>> {};
 

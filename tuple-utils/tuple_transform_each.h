@@ -25,7 +25,7 @@
 
 namespace tupleutils {
 
-namespace {
+namespace detail {
 
 template <typename T, template <typename> class T_transformer,
   std::size_t index>
@@ -72,7 +72,7 @@ public:
   using type = t_type_with_transformed_element;
 };
 
-} // anonymous namespace
+} // detail namespace
 
 /**
  * Get a tuple with each element having the transformed value of the element
@@ -81,11 +81,11 @@ public:
 
 template <typename T, template <typename> class T_transformer>
 struct tuple_type_transform_each {
-  using type = typename tuple_type_transform_each_impl<T, T_transformer,
+  using type = typename detail::tuple_type_transform_each_impl<T, T_transformer,
     std::tuple_size<T>::value - 1>::type;
 };
 
-namespace {
+namespace detail {
 
 template <template <typename> class T_transformer, std::size_t index>
 struct tuple_transform_each_impl {
@@ -133,7 +133,7 @@ struct tuple_transform_each_impl<T_transformer, 0> {
   }
 };
 
-} // anonymous namespace
+} // detail namespace
 
 /**
  * Get a tuple with each element having the transformed value of the element
@@ -146,7 +146,7 @@ tuple_transform_each(T&& t) {
   constexpr auto size = std::tuple_size<std::decay_t<T>>::value;
   static_assert(size > 0, "The tuple size must be more than zero.");
 
-  return tuple_transform_each_impl<T_transformer,
+  return detail::tuple_transform_each_impl<T_transformer,
     size - 1>::tuple_transform_each(std::forward<T>(t), t);
 }
 

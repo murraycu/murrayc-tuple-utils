@@ -37,7 +37,7 @@ template<class ...Args1> struct tuple_type_interlace {
 };
 */
 
-namespace {
+namespace detail {
 
 template <class T, class... T_tuples>
 struct tuple_type_interlace_ {
@@ -58,12 +58,12 @@ struct tuple_type_interlace_<std::tuple<T_result_types...>, T<T_first>,
   : tuple_type_interlace_<std::tuple<T_result_types..., T_first>, T_tuples...> {
 };
 
-} // anonymous namespace
+} // detail namespace
 
 template <class... T_tuples>
-using tuple_type_interlace = tuple_type_interlace_<std::tuple<>, T_tuples...>;
+using tuple_type_interlace = detail::tuple_type_interlace_<std::tuple<>, T_tuples...>;
 
-namespace {
+namespace detail {
 
 template <typename T_tuple1, typename T_tuple2, std::size_t N>
 struct tuple_interlace_impl {
@@ -110,7 +110,7 @@ struct tuple_interlace_impl<T_tuple1, T_tuple2, 0> {
   }
 };
 
-} // anonymous namespace
+} // detail namespace
 
 /**
  * Get the a tuple that interlaces two other tuples.
@@ -133,7 +133,7 @@ tuple_interlace(T_tuple1&& tuple1, T_tuple2&& tuple2) {
   constexpr auto size2 = std::tuple_size<std::decay_t<T_tuple2>>::value;
   static_assert(size1 == size2, "tuple1 and tuple2 must have the same size.");
 
-  return tuple_interlace_impl<T_tuple1, T_tuple2, size1>::interlace(
+  return detail::tuple_interlace_impl<T_tuple1, T_tuple2, size1>::interlace(
     std::forward<T_tuple1>(tuple1), std::forward<T_tuple2>(tuple2));
 }
 

@@ -21,7 +21,7 @@
 
 namespace tupleutils {
 
-namespace {
+namespace detail {
 
 template <template <typename> class T_visitor, std::size_t index,
   typename... T_extras>
@@ -49,7 +49,7 @@ struct tuple_for_each_impl<T_visitor, 0, T_extras...> {
   }
 };
 
-} // anonymous namespace
+} // detail namespace
 
 
 /**
@@ -73,7 +73,7 @@ tuple_for_each(T&& t, T_extras&&... extras) {
     return;
   }
 
-  tuple_for_each_impl<T_visitor, size - 1, T_extras...>::tuple_for_each(
+  detail::tuple_for_each_impl<T_visitor, size - 1, T_extras...>::tuple_for_each(
     std::forward<T>(t), std::forward<T_extras>(extras)...);
 }
 

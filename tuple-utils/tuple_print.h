@@ -22,7 +22,7 @@
 
 namespace tupleutils {
 
-namespace { // anonymous namespace
+namespace detail {
 
 // Based on example code from here:
 // http://en.cppreference.com/w/cpp/utility/tuple/tuple_cat
@@ -46,7 +46,7 @@ public:
   }
 };
 
-} // anonymous namespace
+} // detail namespace
 
 // TODO: Take a const std::tuple<Args...>& instead,
 // to restrict the type allowed?
@@ -55,7 +55,7 @@ void
 tuple_print(T&& t, std::ostream& output_stream = std::cout) {
   //We use std::decay_t<> because tuple_size is not defined for references.
   constexpr auto size = std::tuple_size<std::decay_t<T>>::value;
-  TuplePrinter<T, size>::print(std::forward<T>(t), output_stream);
+  detail::TuplePrinter<T, size>::print(std::forward<T>(t), output_stream);
 }
 
 } // namespace tupleutils

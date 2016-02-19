@@ -21,7 +21,7 @@
 
 namespace tupleutils {
 
-namespace {
+namespace detail {
 
 template <typename T, std::size_t remove_from_start>
 struct tuple_type_end_impl {
@@ -34,16 +34,16 @@ struct tuple_type_end_impl<T, 0> {
   using type = T;
 };
 
-} // anonymous namespace
+} // detail namespace
 
 /**
  * Get the type of a tuple with the last @a len types of the original.
  */
 template <typename T, std::size_t len>
 struct tuple_type_end
-  : tuple_type_end_impl<T, std::tuple_size<T>::value - len> {};
+  : detail::tuple_type_end_impl<T, std::tuple_size<T>::value - len> {};
 
-namespace {
+namespace detail {
 
 template <typename T, std::size_t remove_from_start>
 struct tuple_end_impl {
@@ -73,7 +73,7 @@ struct tuple_end_impl<T, 0> {
   }
 };
 
-} // anonymous namespace
+} // detail namespace
 
 /**
  * Get the tuple with the last @a len items of the original.
@@ -85,7 +85,7 @@ decltype(auto) // typename tuple_type_end<T, len>::type
   constexpr auto size = std::tuple_size<std::decay_t<T>>::value;
   static_assert(len <= size, "The tuple size must be less than or equal to the length.");
   constexpr auto size_start = size - len;
-  return tuple_end_impl<T, size_start>::tuple_end(std::forward<T>(t));
+  return detail::tuple_end_impl<T, size_start>::tuple_end(std::forward<T>(t));
 }
 
 } // namespace tupleutils;

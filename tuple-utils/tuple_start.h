@@ -22,7 +22,7 @@
 
 namespace tupleutils {
 
-namespace {
+namespace detail {
 
 template <typename T, typename Seq>
 struct tuple_type_start_impl;
@@ -32,16 +32,16 @@ struct tuple_type_start_impl<T, std::index_sequence<I...>> {
   using type = std::tuple<typename std::tuple_element<I, T>::type...>;
 };
 
-} // anonymous namespace
+} // detail namespace
 
 /**
  * Get the type of a tuple with just the first @len items.
  */
 template <typename T, std::size_t len>
 struct tuple_type_start
-  : tuple_type_start_impl<T, std::make_index_sequence<len>> {};
+  : detail::tuple_type_start_impl<T, std::make_index_sequence<len>> {};
 
-namespace {
+namespace detail {
 
 template <typename T, typename Seq>
 struct tuple_start_impl;
@@ -59,7 +59,7 @@ struct tuple_start_impl<T, std::index_sequence<I...>> {
   }
 };
 
-} // anonymous namespace
+} // detail namespace
 
 /**
  * Get the tuple with the last @a len items of the original.
@@ -71,7 +71,7 @@ decltype(auto) // typename tuple_type_end<T, len>::type
   constexpr auto size = std::tuple_size<std::decay_t<T>>::value;
   static_assert(len <= size, "The tuple size must be less than or equal to the length.");
 
-  return tuple_start_impl<T, std::make_index_sequence<len>>::tuple_start(
+  return detail::tuple_start_impl<T, std::make_index_sequence<len>>::tuple_start(
     std::forward<T>(t));
 }
 

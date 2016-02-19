@@ -18,6 +18,7 @@
 #include <cstdlib>
 #include <tuple-utils/tuple_transform_each.h>
 #include <utility>
+#include <functional>
 
 template <class T_element_from>
 class transform_to_string {
@@ -181,6 +182,29 @@ test_tuple_transform_each_nonconst() {
   assert(std::get<2>(t_transformed) == 60);
 }
 
+void
+test_tuple_transform_each_stdref() {
+  int a = 1;
+  int b = 2;
+  int c = 3;
+  auto t_original = std::make_tuple(std::ref(a), std::ref(b), std::ref(c));
+  auto t_transformed =
+    tupleutils::tuple_transform_each<transform_to_string>(t_original);
+  auto t_expected =
+    std::make_tuple(std::string("1"), std::string("2"), std::string("3"));
+
+  static_assert(std::tuple_size<decltype(t_transformed)>::value == 3,
+    "unexpected tuple_transform_each()ed tuple size.");
+
+  assert(std::get<0>(t_transformed) == "1");
+  assert(std::get<1>(t_transformed) == "2");
+  assert(std::get<2>(t_transformed) == "3");
+
+  static_assert(
+    std::is_same<decltype(t_transformed), decltype(t_expected)>::value,
+    "unexpected transform_each()ed tuple type");
+}
+
 int
 main() {
   test_tuple_type_transform_each_same_types();
@@ -190,6 +214,8 @@ main() {
   test_tuple_transform_each_multiple_types();
 
   test_tuple_transform_each_nonconst();
+
+  test_tuple_transform_each_stdref();
 
   return EXIT_SUCCESS;
 }

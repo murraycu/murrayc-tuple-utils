@@ -9,7 +9,6 @@ h_sources_public = \
   tuple-utils/tuple_print.h \
   tuple-utils/tuple_start.h \
   tuple-utils/tuple_subset.h \
-  tuple-utils/tuple_transform_each.h \
-  tuple-utils/tuple_transform_each_const.h
+  tuple-utils/tuple_transform_each.h
 
 cc_sources =

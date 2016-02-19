@@ -94,10 +94,10 @@ struct tuple_transform_each_impl {
   static decltype(auto)
   tuple_transform_each(T_current&& t, T_original& t_original) {
     using from_element_type = typename std::tuple_element<index, std::decay_t<T_current>>::type;
-
-    auto& from = std::get<index>(t_original);
-    const auto element = T_transformer<from_element_type>::transform(from);
-    const auto t_element = std::make_tuple(element);
+    using to_element_type = typename std::result_of<decltype (
+      &T_transformer<from_element_type>::transform)(from_element_type&)>::type;
+    const auto t_element =
+      std::tuple<to_element_type>(T_transformer<from_element_type>::transform(std::get<index>(t_original)));
 
     const auto t_start = tuple_start<index>(std::forward<T_current>(t));
 
@@ -125,9 +125,11 @@ struct tuple_transform_each_impl<T_transformer, 0> {
     constexpr std::size_t index = 0;
 
     using from_element_type = typename std::tuple_element<index, T_original>::type;
-    const auto element =
-      T_transformer<from_element_type>::transform(std::get<index>(t_original));
-    const auto tuple_element = std::make_tuple(element);
+    using to_element_type = typename std::result_of<decltype (
+      &T_transformer<from_element_type>::transform)(from_element_type&)>::type;
+    const auto tuple_element =
+      std::tuple<to_element_type>(T_transformer<from_element_type>::transform(std::get<index>(t_original)));
+
     const auto tuple_rest = tuple_cdr(std::forward<T_current>(t));
     return std::tuple_cat(tuple_element, tuple_rest);
   }

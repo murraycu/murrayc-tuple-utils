@@ -31,9 +31,9 @@ template <class T, std::size_t N>
 class TuplePrinter {
 public:
   static void
-  print(const T& t, std::ostream& output_stream) {
+  print(T&& t, std::ostream& output_stream) {
     TuplePrinter<T, N - 1>::print(t, output_stream);
-    output_stream << ", " << std::get<N - 1>(t);
+    output_stream << ", " << std::get<N - 1>(std::forward<T>(t));
   }
 };
 
@@ -41,8 +41,8 @@ template <class T>
 class TuplePrinter<T, 1> {
 public:
   static void
-  print(const T& t, std::ostream& output_stream) {
-    output_stream << std::get<0>(t);
+  print(T&& t, std::ostream& output_stream) {
+    output_stream << std::get<0>(std::forward<T>(t));
   }
 };
 
@@ -52,8 +52,10 @@ public:
 // to restrict the type allowed?
 template <class T>
 void
-tuple_print(const T& t, std::ostream& output_stream = std::cout) {
-  TuplePrinter<T, std::tuple_size<T>::value>::print(t, output_stream);
+tuple_print(T&& t, std::ostream& output_stream = std::cout) {
+  //We use std::decay_t<> because tuple_size is not defined for references.
+  constexpr auto size = std::tuple_size<std::decay_t<T>>::value;
+  TuplePrinter<T, size>::print(std::forward<T>(t), output_stream);
 }
 
 } // namespace tupleutils

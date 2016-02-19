@@ -205,6 +205,62 @@ test_tuple_transform_each_stdref() {
     "unexpected transform_each()ed tuple type");
 }
 
+
+//This can only be used via std::ref(), for instance.
+//Any attempt to copy or move it, should cause a compiler error.
+class NonCopyable {
+public:
+  explicit NonCopyable(int val)
+  : m_val(val)
+  {}
+  
+  int get_val() const {
+    return m_val;
+  }
+
+  NonCopyable(const NonCopyable& src) = delete;
+  NonCopyable& operator=(const NonCopyable& src) = delete;
+  
+  NonCopyable(NonCopyable&& src) = delete;
+  NonCopyable& operator=(NonCopyable&& src) = delete;
+
+private:
+  int m_val;
+};
+
+
+template <class T_element_from>
+class transform_noncopyable_to_string {
+public:
+  static decltype(auto)
+  transform(T_element_from&& from) {
+    return std::to_string(from.get_val());
+  }
+};
+
+void
+test_tuple_transform_each_stdref_non_copyable() {
+  NonCopyable a(1);
+  NonCopyable b(2);
+  NonCopyable c(3);
+  auto t_original = std::make_tuple(std::ref(a), std::ref(b), std::ref(c));
+  auto t_transformed =
+    tupleutils::tuple_transform_each<transform_noncopyable_to_string>(t_original);
+  auto t_expected =
+    std::make_tuple(std::string("1"), std::string("2"), std::string("3"));
+
+  static_assert(std::tuple_size<decltype(t_transformed)>::value == 3,
+    "unexpected tuple_transform_each()ed tuple size.");
+
+  assert(std::get<0>(t_transformed) == "1");
+  assert(std::get<1>(t_transformed) == "2");
+  assert(std::get<2>(t_transformed) == "3");
+
+  static_assert(
+    std::is_same<decltype(t_transformed), decltype(t_expected)>::value,
+    "unexpected transform_each()ed tuple type");
+}
+
 int
 main() {
   test_tuple_type_transform_each_same_types();
@@ -216,6 +272,7 @@ main() {
   test_tuple_transform_each_nonconst();
 
   test_tuple_transform_each_stdref();
+  test_tuple_transform_each_stdref_non_copyable();
 
   return EXIT_SUCCESS;
 }

@@ -96,8 +96,7 @@ struct tuple_interlace_impl<T_tuple1, T_tuple2, 1> {
   static decltype(auto)
   interlace(T_tuple1&& tuple1, T_tuple2&& tuple2) {
     //We don't use std::make_tuple(), to preserver std::ref()ed elements.
-    using interlace = typename tuple_type_interlace<T_tuple1, T_tuple2>::type;
-    return interlace(std::get<0>(std::forward<T_tuple1>(tuple1)), std::get<0>(std::forward<T_tuple2>(tuple2)));
+    return std::tuple_cat(std::forward<T_tuple1>(tuple1), std::forward<T_tuple2>(tuple2));
   }
 };
 

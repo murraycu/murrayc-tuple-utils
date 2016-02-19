@@ -68,22 +68,23 @@ namespace {
 template <typename T_tuple1, typename T_tuple2, std::size_t N>
 struct tuple_interlace_impl {
   static decltype(auto)
-  interlace(const T_tuple1& tuple1, const T_tuple2& tuple2) {
-    const auto first_interlaced =
-      std::make_tuple(std::get<0>(tuple1), std::get<0>(tuple2));
+  interlace(T_tuple1&& tuple1, T_tuple2&& tuple2) {
+    auto first_interlaced =
+      std::make_tuple(std::get<0>(std::forward<T_tuple1>(tuple1)), std::get<0>(std::forward<T_tuple2>(tuple2)));
 
-    const auto remaining1 = tuple_cdr(tuple1);
-    const auto remaining2 = tuple_cdr(tuple2);
-
-    constexpr auto size1 = std::tuple_size<T_tuple1>::value;
-    constexpr auto size2 = std::tuple_size<T_tuple1>::value;
+    //We use std::decay_t<> because tuple_size is not defined for references.
+    constexpr auto size1 = std::tuple_size<std::decay_t<T_tuple1>>::value;
+    constexpr auto size2 = std::tuple_size<std::decay_t<T_tuple2>>::value;
     static_assert(
       size1 == size2, "remaining1 and remaining2 must have the same size.");
 
-    const auto remaining_interlaced =
-      tuple_interlace_impl<typename tuple_type_cdr<T_tuple1>::type,
-        typename tuple_type_cdr<T_tuple2>::type,
-        size1 - 1>::interlace(remaining1, remaining2);
+    using cdr1 = typename tuple_type_cdr<std::decay_t<T_tuple1>>::type;
+    using cdr2 = typename tuple_type_cdr<std::decay_t<T_tuple2>>::type;
+
+    auto remaining_interlaced =
+      tuple_interlace_impl<cdr1, cdr2, size1 - 1>::interlace(
+        tuple_cdr(std::forward<T_tuple1>(tuple1)),
+        tuple_cdr(std::forward<T_tuple2>(tuple2)));
 
     return std::tuple_cat(first_interlaced, remaining_interlaced);
   }
@@ -93,8 +94,10 @@ struct tuple_interlace_impl {
 template <typename T_tuple1, typename T_tuple2>
 struct tuple_interlace_impl<T_tuple1, T_tuple2, 1> {
   static decltype(auto)
-  interlace(const T_tuple1& tuple1, const T_tuple2& tuple2) {
-    return std::make_tuple(std::get<0>(tuple1), std::get<0>(tuple2));
+  interlace(T_tuple1&& tuple1, T_tuple2&& tuple2) {
+    //We don't use std::make_tuple(), to preserver std::ref()ed elements.
+    using interlace = typename tuple_type_interlace<T_tuple1, T_tuple2>::type;
+    return interlace(std::get<0>(std::forward<T_tuple1>(tuple1)), std::get<0>(std::forward<T_tuple2>(tuple2)));
   }
 };
 
@@ -102,8 +105,8 @@ struct tuple_interlace_impl<T_tuple1, T_tuple2, 1> {
 template <typename T_tuple1, typename T_tuple2>
 struct tuple_interlace_impl<T_tuple1, T_tuple2, 0> {
   static decltype(auto)
-  interlace(const T_tuple1& tuple1, const T_tuple2& /* tuple2 */) {
-    return tuple1;
+  interlace(T_tuple1&& tuple1, T_tuple2&& /* tuple2 */) {
+    return std::forward<T_tuple1>(tuple1);
   }
 };
 
@@ -124,14 +127,14 @@ struct tuple_interlace_impl<T_tuple1, T_tuple2, 0> {
  */
 template <typename T_tuple1, typename T_tuple2>
 decltype(auto)
-tuple_interlace(const T_tuple1& tuple1, const T_tuple2& tuple2) {
-
-  constexpr auto size1 = std::tuple_size<T_tuple1>::value;
-  constexpr auto size2 = std::tuple_size<T_tuple1>::value;
+tuple_interlace(T_tuple1&& tuple1, T_tuple2&& tuple2) {
+  //We use std::decay_t<> because tuple_size is not defined for references.
+  constexpr auto size1 = std::tuple_size<std::decay_t<T_tuple1>>::value;
+  constexpr auto size2 = std::tuple_size<std::decay_t<T_tuple2>>::value;
   static_assert(size1 == size2, "tuple1 and tuple2 must have the same size.");
 
   return tuple_interlace_impl<T_tuple1, T_tuple2, size1>::interlace(
-    tuple1, tuple2);
+    std::forward<T_tuple1>(tuple1), std::forward<T_tuple2>(tuple2));
 }
 
 } // namespace tupleutils

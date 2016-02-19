@@ -142,8 +142,10 @@ struct tuple_transform_each_impl<T_transformer, 0> {
 template <template <typename> class T_transformer, typename T>
 decltype(auto)
 tuple_transform_each(T&& t) {
+  //We use std::decay_t<> because tuple_size is not defined for references.
   constexpr auto size = std::tuple_size<std::decay_t<T>>::value;
   static_assert(size > 0, "The tuple size must be more than zero.");
+
   return tuple_transform_each_impl<T_transformer,
     size - 1>::tuple_transform_each(std::forward<T>(t), t);
 }

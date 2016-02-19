@@ -31,7 +31,7 @@ struct tuple_type_subset {
   // Get the start to remove the size - (pos+len);
   // then get the end to remove the first pos elements:
   using type = typename tuple_type_start<
-    typename tuple_type_end<T, std::tuple_size<T>::value - pos>::type,
+    typename tuple_type_end<T, std::tuple_size<std::decay_t<T>>::value - pos>::type,
     len>::type;
 
   /*
@@ -48,8 +48,13 @@ struct tuple_type_subset {
  */
 template <std::size_t pos, std::size_t len, typename T>
 decltype(auto)
-tuple_subset(const T& t) {
-  return tuple_start<len>(tuple_end<std::tuple_size<T>::value - pos>(t));
+tuple_subset(T&& t) {
+  //We use std::decay_t<> because tuple_size is not defined for references.
+  constexpr auto size = std::tuple_size<std::decay_t<T>>::value;
+  static_assert(pos < size, "The position must be less than the tuple size.");
+  static_assert(len <= size - pos , "The length must be less than, or equal to, the available size from the position.");
+
+  return tuple_start<len>(tuple_end<size - pos>(std::forward<T>(t)));
 }
 
 } // namespace tupleutils;

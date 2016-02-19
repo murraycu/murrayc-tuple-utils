@@ -51,9 +51,6 @@ struct tuple_for_each_impl<T_visitor, 0, T_extras...> {
 
 } // anonymous namespace
 
-// TODO: Combine tuple_for_each() and tuple_for_each_const() in one template,
-// or at least different specializations of templates.
-// It must be possible. murrayc.
 
 /**
  * Get a tuple with each element having the transformed value of the element

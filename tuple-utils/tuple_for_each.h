@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
 
-#ifndef _MURRAYC_TUPLE_UTILS_TUPLE_FOR_EACH_H_
-#define _MURRAYC_TUPLE_UTILS_TUPLE_FOR_EACH_H_
+#ifndef MURRAYC_TUPLE_UTILS_TUPLE_FOR_EACH_H
+#define MURRAYC_TUPLE_UTILS_TUPLE_FOR_EACH_H
 
 #include <tuple>
 
@@ -79,4 +79,4 @@ tuple_for_each(T&& t, T_extras&&... extras) {
 
 } // namespace tupleutils
 
-#endif //_MURRAYC_TUPLE_UTILS_TUPLE_FOR_EACH_H_
+#endif //MURRAYC_TUPLE_UTILS_TUPLE_FOR_EACH_H

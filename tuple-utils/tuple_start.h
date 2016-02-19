@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
 
-#ifndef _MURRAYC_TUPLE_UTILS_TUPLE_START_H_
-#define _MURRAYC_TUPLE_UTILS_TUPLE_START_H_
+#ifndef MURRAYC_TUPLE_UTILS_TUPLE_START_H
+#define MURRAYC_TUPLE_UTILS_TUPLE_START_H
 
 #include <tuple>
 #include <utility>
@@ -77,4 +77,4 @@ decltype(auto) // typename tuple_type_end<T, len>::type
 
 } // namespace tupleutils;
 
-#endif //_MURRAYC_TUPLE_UTILS_TUPLE_START_H_
+#endif //MURRAYC_TUPLE_UTILS_TUPLE_START_H

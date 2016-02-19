@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
 
-#ifndef _MURRAYC_TUPLE_UTILS_TUPLE_TRANSFORM_EACH_H_
-#define _MURRAYC_TUPLE_UTILS_TUPLE_TRANSFORM_EACH_H_
+#ifndef MURRAYC_TUPLE_UTILS_TUPLE_TRANSFORM_EACH_H
+#define MURRAYC_TUPLE_UTILS_TUPLE_TRANSFORM_EACH_H
 
 #include <tuple-utils/tuple_cat.h>
 #include <tuple-utils/tuple_cdr.h>
@@ -152,4 +152,4 @@ tuple_transform_each(T&& t) {
 
 } // namespace tupleutils
 
-#endif //_MURRAYC_TUPLE_UTILS_TUPLE_TRANSFORM_EACH_H_
+#endif //MURRAYC_TUPLE_UTILS_TUPLE_TRANSFORM_EACH_H

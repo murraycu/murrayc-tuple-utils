@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
 
-#ifndef _MURRAYC_TUPLE_UTILS_TUPLE_PRINT_H
-#define _MURRAYC_TUPLE_UTILS_TUPLE_PRINT_H
+#ifndef MURRAYC_TUPLE_UTILS_TUPLE_PRINT_H
+#define MURRAYC_TUPLE_UTILS_TUPLE_PRINT_H
 
 #include <iostream>
 #include <tuple>
@@ -60,4 +60,4 @@ tuple_print(T&& t, std::ostream& output_stream = std::cout) {
 
 } // namespace tupleutils
 
-#endif //_MURRAYC_TUPLE_UTILS_TUPLE_PRINT_H
+#endif //MURRAYC_TUPLE_UTILS_TUPLE_PRINT_H

@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
 
-#ifndef _MURRAYC_TUPLE_UTILS_TUPLE_INTERLACE_H_
-#define _MURRAYC_TUPLE_UTILS_TUPLE_INTERLACE_H_
+#ifndef MURRAYC_TUPLE_UTILS_TUPLE_INTERLACE_H
+#define MURRAYC_TUPLE_UTILS_TUPLE_INTERLACE_H
 
 #include <tuple-utils/tuple_cdr.h>
 #include <tuple>
@@ -139,4 +139,4 @@ tuple_interlace(T_tuple1&& tuple1, T_tuple2&& tuple2) {
 
 } // namespace tupleutils
 
-#endif //_MURRAYC_TUPLE_UTILS_TUPLE_INTERLACE_H_
+#endif //MURRAYC_TUPLE_UTILS_TUPLE_INTERLACE_H

@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
 
-#ifndef _MURRAYC_TUPLE_UTILS_TUPLE_SUBSET_H_
-#define _MURRAYC_TUPLE_UTILS_TUPLE_SUBSET_H_
+#ifndef MURRAYC_TUPLE_UTILS_TUPLE_SUBSET_H
+#define MURRAYC_TUPLE_UTILS_TUPLE_SUBSET_H
 
 #include <tuple-utils/tuple_end.h>
 #include <tuple-utils/tuple_start.h>
@@ -59,4 +59,4 @@ tuple_subset(T&& t) {
 
 } // namespace tupleutils;
 
-#endif //_MURRAYC_TUPLE_UTILS_TUPLE_SUBSET_H_
+#endif //MURRAYC_TUPLE_UTILS_TUPLE_SUBSET_H

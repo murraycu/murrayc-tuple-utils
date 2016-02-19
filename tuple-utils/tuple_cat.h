@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
 
-#ifndef _MURRAYC_TUPLE_UTILS_TUPLE_CAT_H_
-#define _MURRAYC_TUPLE_UTILS_TUPLE_CAT_H_
+#ifndef MURRAYC_TUPLE_UTILS_TUPLE_CAT_H
+#define MURRAYC_TUPLE_UTILS_TUPLE_CAT_H
 
 #include <tuple>
 #include <type_traits>
@@ -51,4 +51,4 @@ struct tuple_type_cat
 
 } // namespace tupleutils
 
-#endif //_MURRAYC_TUPLE_UTILS_TUPLE_CAT_H_
+#endif //MURRAYC_TUPLE_UTILS_TUPLE_CAT_H

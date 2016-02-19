@@ -69,7 +69,13 @@ struct tuple_for_each_impl<T_visitor, 0, T_extras...> {
 template <template <typename> class T_visitor, typename T, typename... T_extras>
 void
 tuple_for_each(T&& t, T_extras&&... extras) {
-  constexpr auto size = std::tuple_size<std::remove_reference_t<T>>::value;
+  //We use std::decay_t<> because tuple_size is not defined for references.
+  constexpr auto size = std::tuple_size<std::decay_t<T>>::value;
+
+  if(size == 0) {
+    return;
+  }
+
   tuple_for_each_impl<T_visitor, size - 1, T_extras...>::tuple_for_each(
     std::forward<T>(t), std::forward<T_extras>(extras)...);
 }

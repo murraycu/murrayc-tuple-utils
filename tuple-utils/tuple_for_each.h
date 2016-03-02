@@ -53,8 +53,8 @@ struct tuple_for_each_impl<T_visitor, 0, T_extras...> {
 
 
 /**
- * Get a tuple with each element having the transformed value of the element
- * in the original tuple.
+ * Call the @e T_Visitor functors visit() method for each element,
+ * from the first to the last.
  *
  * @tparam T_visitor should be a template that has a static visit() method.
  * @tparam T the tuple type.

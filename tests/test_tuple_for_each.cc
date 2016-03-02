@@ -171,6 +171,27 @@ test_tuple_for_each_stdref() {
   }
 }
 
+static std::string correct_sequence_output;
+
+template <class T_element_from>
+class for_each_correct_sequence {
+public:
+  static void
+  visit(const T_element_from& from) {
+    //std::cout << "from: " << from << std::endl;
+    correct_sequence_output += std::to_string(from);
+  }
+};
+
+void
+test_tuple_for_each_correct_sequence() {
+  correct_sequence_output.clear();
+  auto t = std::make_tuple(1, 2, 3);
+  tupleutils::tuple_for_each<for_each_correct_sequence>(t);
+  //std::cout << "correct_sequence_output: " << correct_sequence_output << std::endl;
+  assert(correct_sequence_output == "123");
+}
+
 int
 main() {
   test_tuple_for_each_same_types();
@@ -182,6 +203,8 @@ main() {
   test_tuple_for_each_nonconst();
   
   test_tuple_for_each_stdref();
+
+  test_tuple_for_each_correct_sequence();
 
   return EXIT_SUCCESS;
 }

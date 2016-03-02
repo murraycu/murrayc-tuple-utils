@@ -54,7 +54,7 @@ struct tuple_for_each_impl<T_visitor, 1, T_extras...> {
     static_assert(size > 0, "size must be more than 0.");
 
     constexpr auto index = size - 1;
-    static_assert(index > 0, "unexpected index.");
+    static_assert(index >= 0, "unexpected index.");
 
     using element_type = typename std::tuple_element<index, std::decay_t<T>>::type;
     T_visitor<element_type>::visit(std::get<index>(std::forward<T>(t)), std::forward<T_extras>(extras)...);

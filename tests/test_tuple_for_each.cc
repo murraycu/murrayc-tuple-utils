@@ -192,6 +192,13 @@ test_tuple_for_each_correct_sequence() {
   assert(correct_sequence_output == "123");
 }
 
+void
+test_tuple_for_each_empty_tuple() {
+  auto t = std::tuple<>();
+  tupleutils::tuple_for_each<for_each_simple>(t);
+}
+
+
 int
 main() {
   test_tuple_for_each_same_types();
@@ -205,6 +212,8 @@ main() {
   test_tuple_for_each_stdref();
 
   test_tuple_for_each_correct_sequence();
+
+  test_tuple_for_each_empty_tuple();
 
   return EXIT_SUCCESS;
 }

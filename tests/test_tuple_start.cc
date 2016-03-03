@@ -51,6 +51,20 @@ test_tuple_type_start() {
 
 void
 test_tuple_start() {
+  //Check that tuple_star<0> returns an empty tuple:
+  {
+    auto t_original =
+      std::make_tuple(1, 2, 3);
+    auto t_prefix = tupleutils::tuple_start<0>(t_original);
+
+    static_assert(std::tuple_size<decltype(t_prefix)>::value == 0,
+      "unexpected tuple_start()ed tuple size.");
+
+    static_assert(std::is_same<decltype(t_prefix), std::tuple<>>::value,
+      "unexpected start()ed tuple type");
+  }
+
+  //Check that tuple_start<whole size> gets the original tuple:
   {
     auto t_original =
       std::make_tuple(nullptr, std::string("hello"), std::string("world"));

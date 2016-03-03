@@ -57,6 +57,21 @@ test_tuple_type_end() {
 
 void
 test_tuple_end() {
+
+  // Test that tuple_end<0> gives an empty tuple:
+  {
+    auto t_original =
+      std::make_tuple(1, 2, 3);
+    auto t_suffix = tupleutils::tuple_end<0>(t_original);
+
+    static_assert(std::tuple_size<decltype(t_suffix)>::value == 0,
+      "unexpected tuple_end()ed tuple size.");
+
+    static_assert(std::is_same<decltype(t_suffix), std::tuple<>>::value,
+      "unexpected end()ed tuple type");
+  }
+
+  //Test that tuple_end<whole size> gives the original tuple:
   {
     auto t_original =
       std::make_tuple(nullptr, std::string("hello"), std::string("world"));

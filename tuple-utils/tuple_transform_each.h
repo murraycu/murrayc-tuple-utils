@@ -167,14 +167,6 @@ tuple_transform_each(T&& t) {
   //We use std::decay_t<> because tuple_size is not defined for references.
   constexpr auto size = std::tuple_size<std::decay_t<T>>::value;
 
-  /* TODO: Allow use on an empty tuple?
-  if(size == 0) {
-    return;
-  }
-  */
-
-  static_assert(size > 0, "The tuple size must be more than zero.");
-
   return detail::tuple_transform_each_impl<T_transformer,
     size>::tuple_transform_each(std::forward<T>(t), t);
 }

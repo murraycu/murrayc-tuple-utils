@@ -282,14 +282,11 @@ test_tuple_transform_each_correct_sequence() {
   assert(correct_sequence_output == "123");
 }
 
-/** TODO: Should this work?
 void
 test_tuple_transform_each_empty_tuple() {
   auto t = std::tuple<>();
   tupleutils::tuple_transform_each<transform_to_string>(t);
 }
-*/
-
 
 int
 main() {
@@ -306,7 +303,7 @@ main() {
 
   test_tuple_transform_each_correct_sequence();
 
-  //test_tuple_transform_each_empty_tuple();
+  test_tuple_transform_each_empty_tuple();
 
   return EXIT_SUCCESS;
 }

@@ -47,6 +47,7 @@ struct tuple_type_subset {
  * type.
  */
 template <std::size_t pos, std::size_t len, typename T>
+constexpr
 decltype(auto)
 tuple_subset(T&& t) {
   //We use std::decay_t<> because tuple_size is not defined for references.

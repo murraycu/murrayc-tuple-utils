@@ -136,10 +136,29 @@ test_tuple_subset() {
   }
 }
 
+constexpr
+void
+test_tuple_subset_constexpr() {
+  constexpr auto str_hello = "hello";
+  constexpr auto str_world = "world";
+
+  constexpr auto t_original =
+    std::make_tuple(nullptr, str_hello, str_world);
+  constexpr auto t_subset = tupleutils::tuple_subset<0, 2>(t_original);
+
+  static_assert(std::tuple_size<decltype(t_subset)>::value == 2,
+    "unexpected tuple_subset()ed tuple size.");
+
+  assert(std::get<0>(t_subset) == nullptr);
+  assert(std::get<1>(t_subset) == str_hello);
+}
+
 int
 main() {
   test_tuple_type_subset();
   test_tuple_subset();
+
+  test_tuple_subset_constexpr();
 
   return EXIT_SUCCESS;
 }

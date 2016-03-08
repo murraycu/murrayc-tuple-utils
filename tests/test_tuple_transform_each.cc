@@ -24,7 +24,7 @@ template <class T_element_from>
 class transform_to_string {
 public:
   static decltype(auto)
-  transform(T_element_from& from) {
+  transform(const T_element_from& from) {
     return std::to_string(from);
   }
 };
@@ -95,7 +95,7 @@ template <>
 class transform_to_something<int> {
 public:
   static std::string
-  transform(int& from) {
+  transform(int from) {
     return std::to_string(from);
   }
 };
@@ -105,7 +105,7 @@ template <>
 class transform_to_something<double> {
 public:
   static char
-  transform(double& from) {
+  transform(double from) {
     return std::to_string(from)[0];
   }
 };
@@ -115,7 +115,7 @@ template <>
 class transform_to_something<std::string> {
 public:
   static int
-  transform(std::string& from) {
+  transform(const std::string& from) {
     return std::stoi(from);
   }
 };

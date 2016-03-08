@@ -45,8 +45,7 @@ check_PROGRAMS = \
   tests/test_tuple_print \
   tests/test_tuple_start \
   tests/test_tuple_subset \
-  tests/test_tuple_transform_each \
-  tests/test_tuple_transform_each_const
+  tests/test_tuple_transform_each
 
 TESTS = $(check_PROGRAMS)
 
@@ -115,12 +114,6 @@ tests_test_tuple_transform_each_CXXFLAGS = \
 tests_test_tuple_transform_each_LDADD = \
 	$(PROJECT_LIBS)
 
-tests_test_tuple_transform_each_const_SOURCES = \
-	tests/test_tuple_transform_each_const.cc
-tests_test_tuple_transform_each_const_CXXFLAGS = \
-	$(COMMON_CXXFLAGS)
-tests_test_tuple_transform_each_const_LDADD = \
-	$(PROJECT_LIBS)
 
 
 

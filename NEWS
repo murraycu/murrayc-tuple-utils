@@ -1,0 +1,23 @@
+0.0.2:
+
+* Use perfect forwarding.
+  (Murray Cumming)
+* Make tuple_*() functions constexpr.
+  (Murray Cumming)
+* Remove tuple_for_each_const() because tuple_for_each() is now generic enough.
+  (Murray Cumming)
+* tuple_for_each(), tuple_transform_each(): Iterate from start to end,
+  not in reverse.
+  (Murray Cumming)
+* tuple_type_cdr<>: Simplify the implementation.
+  (Jonathan Wakely)
+* Allow use with std::ref()ed tuple elements.
+  (Jonathan Wakely)
+* Do not use anyonymous namespace in public headers,
+  to avoid violating the One Definition Rule.
+  (Jonathan Wakely)
+
+
+0.0.1:
+
+* Initial release

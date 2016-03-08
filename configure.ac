@@ -1,4 +1,4 @@
-AC_INIT([murrayc-tuple-utils],[0.0.1])
+AC_INIT([murrayc-tuple-utils],[0.0.2])
 AC_PREREQ(2.63)
 
 AC_CONFIG_SRCDIR([tests/test_tuple_cdr.cc])

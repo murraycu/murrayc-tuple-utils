@@ -137,11 +137,30 @@ test_tuple_end_stdref() {
 }
 
 
+constexpr
+void
+test_tuple_end_constexpr() {
+  constexpr auto str_hello = "hello";
+  constexpr auto str_world = "world";
+
+  constexpr auto t_original =
+    std::make_tuple(nullptr, str_hello, str_world);
+  constexpr auto t_suffix = tupleutils::tuple_end<2>(t_original);
+
+  static_assert(std::tuple_size<decltype(t_suffix)>::value == 2,
+    "unexpected tuple_end()ed tuple size.");
+
+  assert(std::get<0>(t_suffix) == str_hello);
+  assert(std::get<1>(t_suffix) == str_world);
+}
+
 int
 main() {
   test_tuple_type_end();
   test_tuple_end();
   test_tuple_end_stdref();
+
+  test_tuple_end_constexpr();
 
   return EXIT_SUCCESS;
 }

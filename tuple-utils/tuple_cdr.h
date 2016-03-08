@@ -39,6 +39,7 @@ struct tuple_type_cdr<std::tuple<H, T...>>
 namespace detail {
 
 template <typename T, std::size_t... I>
+constexpr
 decltype(auto)
 tuple_cdr_impl(T&& t, std::index_sequence<0, I...>)
 {
@@ -53,6 +54,7 @@ tuple_cdr_impl(T&& t, std::index_sequence<0, I...>)
  * This is analogous to std::tuple_cat().
  */
 template <typename T>
+constexpr
 decltype(auto)
 tuple_cdr(T&& t) {
   //We use std::decay_t<> because tuple_size is not defined for references.

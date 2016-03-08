@@ -63,12 +63,31 @@ test_tuple_interlace() {
   assert(std::get<3>(tuple_interlaced) == '4');
 }
 
+void
+test_tuple_interlace_constexpr() {
+  using type_tuple_is = std::tuple<int, short>;
+  using type_tuple_dc = std::tuple<double, char>;
+
+  constexpr type_tuple_is tuple_is(1, 2);
+  constexpr type_tuple_dc tuple_dc(3.0, '4');
+
+  constexpr auto tuple_interlaced = tupleutils::tuple_interlace(tuple_is, tuple_dc);
+
+  assert(std::get<0>(tuple_interlaced) == 1);
+  assert(std::get<1>(tuple_interlaced) == 3.0);
+  assert(std::get<2>(tuple_interlaced) == 2);
+  assert(std::get<3>(tuple_interlaced) == '4');
+}
+
 int
 main() {
   test_tuple_type_interlace_empty();
   test_tuple_type_interlace();
+
   test_tuple_interlace_empty();
   test_tuple_interlace();
+
+  test_tuple_interlace_constexpr();
 
   return EXIT_SUCCESS;
 }

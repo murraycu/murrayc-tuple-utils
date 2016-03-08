@@ -67,7 +67,9 @@ namespace detail {
 
 template <typename T_tuple1, typename T_tuple2, std::size_t N>
 struct tuple_interlace_impl {
-  static decltype(auto)
+  constexpr
+  static
+  decltype(auto)
   interlace(T_tuple1&& tuple1, T_tuple2&& tuple2) {
     auto first_interlaced =
       std::make_tuple(std::get<0>(std::forward<T_tuple1>(tuple1)), std::get<0>(std::forward<T_tuple2>(tuple2)));
@@ -93,7 +95,9 @@ struct tuple_interlace_impl {
 // partial specialization for N=1:
 template <typename T_tuple1, typename T_tuple2>
 struct tuple_interlace_impl<T_tuple1, T_tuple2, 1> {
-  static decltype(auto)
+  constexpr
+  static
+  decltype(auto)
   interlace(T_tuple1&& tuple1, T_tuple2&& tuple2) {
     //We don't use std::make_tuple(), to preserver std::ref()ed elements.
     return std::tuple_cat(std::forward<T_tuple1>(tuple1), std::forward<T_tuple2>(tuple2));
@@ -103,7 +107,9 @@ struct tuple_interlace_impl<T_tuple1, T_tuple2, 1> {
 // partial specialization for N=0:
 template <typename T_tuple1, typename T_tuple2>
 struct tuple_interlace_impl<T_tuple1, T_tuple2, 0> {
-  static decltype(auto)
+  constexpr
+  static
+  decltype(auto)
   interlace(T_tuple1&& tuple1, T_tuple2&& /* tuple2 */) {
     return std::forward<T_tuple1>(tuple1);
   }
@@ -125,6 +131,7 @@ struct tuple_interlace_impl<T_tuple1, T_tuple2, 0> {
  * This is analogous to std::tuple_cat().
  */
 template <typename T_tuple1, typename T_tuple2>
+constexpr
 decltype(auto)
 tuple_interlace(T_tuple1&& tuple1, T_tuple2&& tuple2) {
   //We use std::decay_t<> because tuple_size is not defined for references.

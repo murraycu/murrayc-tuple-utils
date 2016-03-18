@@ -1,3 +1,13 @@
+0.0.3:
+
+* Relicense under LGPL instead of GPL.
+  (Murray Cumming)
+* test_tuple_transform_each: Comment out constexpr test that fails with g++.
+  (Murray Cumming)
+* Build: Remove mention of removed file.
+  (Murray Cumming)
+
+
 0.0.2:
 
 * Use perfect forwarding.

@@ -225,7 +225,7 @@ main() {
   test_tuple_for_each_multiple_types();
 
   test_tuple_for_each_nonconst();
-  
+
   test_tuple_for_each_stdref();
 
   test_tuple_for_each_correct_sequence();

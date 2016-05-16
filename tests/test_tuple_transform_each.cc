@@ -213,14 +213,14 @@ public:
   explicit NonCopyable(int val)
   : m_val(val)
   {}
-  
+
   int get_val() const {
     return m_val;
   }
 
   NonCopyable(const NonCopyable& src) = delete;
   NonCopyable& operator=(const NonCopyable& src) = delete;
-  
+
   NonCopyable(NonCopyable&& src) = delete;
   NonCopyable& operator=(NonCopyable&& src) = delete;
 

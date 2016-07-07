@@ -44,44 +44,6 @@ template <typename T, std::size_t len>
 struct tuple_type_end
   : detail::tuple_type_end_impl<T, std::tuple_size<T>::value - len> {};
 
-namespace detail {
-
-template <typename T, std::size_t remove_from_start>
-struct tuple_end_impl {
-  constexpr
-  static
-  decltype(auto) // typename tuple_type_end<T, size - remove_from_start>::type
-  tuple_end(T&& t) {
-    static_assert(remove_from_start > 0, "remove_from_start must be more than zero.");
-
-    using cdr = typename tuple_type_cdr<std::decay_t<T>>::type;
-    return tuple_end_impl<cdr, remove_from_start - 1>::tuple_end(
-      tuple_cdr(std::forward<T>(t)));
-  }
-};
-
-template <typename T>
-struct tuple_end_impl<T, 1> {
-  constexpr
-  static
-  decltype(auto)
-  tuple_end(T&& t) {
-    return tuple_cdr(std::forward<T>(t));
-  }
-};
-
-template <typename T>
-struct tuple_end_impl<T, 0> {
-  constexpr
-  static
-  decltype(auto)
-  tuple_end(T&& t) {
-    return std::forward<T>(t);
-  }
-};
-
-} // detail namespace
-
 /**
  * Get the tuple with the last @a len items of the original.
  */
@@ -93,7 +55,19 @@ tuple_end(T&& t) {
   constexpr auto size = std::tuple_size<std::decay_t<T>>::value;
   static_assert(len <= size, "The tuple size must be less than or equal to the length.");
   constexpr auto size_start = size - len;
-  return detail::tuple_end_impl<T, size_start>::tuple_end(std::forward<T>(t));
+
+  if constexpr(len == 0) {
+    // Recursive calls to tuple_cdr() would result in this eventually,
+    // but this avoids the extra work:
+    return std::tuple<>();
+  } else if constexpr(size_start == 0) {
+    return std::forward<T>(t);
+  } else if constexpr(size_start == 1) {
+    return tuple_cdr(std::forward<T>(t));
+  } else {
+    return tuple_end<len>(
+        tuple_cdr(std::forward<T>(t)));
+  }
 }
 
 } // namespace tupleutils;

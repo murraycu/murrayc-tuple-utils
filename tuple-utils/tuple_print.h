@@ -33,17 +33,12 @@ class TuplePrinter {
 public:
   static void
   print(T&& t, std::ostream& output_stream) {
-    TuplePrinter<T, N - 1>::print(t, output_stream);
-    output_stream << ", " << std::get<N - 1>(std::forward<T>(t));
-  }
-};
-
-template <class T>
-class TuplePrinter<T, 1> {
-public:
-  static void
-  print(T&& t, std::ostream& output_stream) {
-    output_stream << std::get<0>(std::forward<T>(t));
+    if constexpr(N == 1) {
+      output_stream << std::get<0>(std::forward<T>(t));
+    } else {
+      TuplePrinter<T, N - 1>::print(t, output_stream);
+      output_stream << ", " << std::get<N - 1>(std::forward<T>(t));
+    }
   }
 };
 

@@ -72,47 +72,31 @@ struct tuple_interlace_impl {
   static
   decltype(auto)
   interlace(T_tuple1&& tuple1, T_tuple2&& tuple2) {
-    auto first_interlaced =
-      std::make_tuple(std::get<0>(std::forward<T_tuple1>(tuple1)), std::get<0>(std::forward<T_tuple2>(tuple2)));
+    if constexpr(N == 0) {
+      return std::forward<T_tuple1>(tuple1);
+    } else if constexpr(N == 1) {
+      //We don't use std::make_tuple(), to preserve std::ref()ed elements.
+      return std::tuple_cat(std::forward<T_tuple1>(tuple1), std::forward<T_tuple2>(tuple2));
+    } else {
+      auto first_interlaced =
+        std::make_tuple(std::get<0>(std::forward<T_tuple1>(tuple1)), std::get<0>(std::forward<T_tuple2>(tuple2)));
 
-    //We use std::decay_t<> because tuple_size is not defined for references.
-    constexpr auto size1 = std::tuple_size<std::decay_t<T_tuple1>>::value;
-    constexpr auto size2 = std::tuple_size<std::decay_t<T_tuple2>>::value;
-    static_assert(
-      size1 == size2, "remaining1 and remaining2 must have the same size.");
+      //We use std::decay_t<> because tuple_size is not defined for references.
+      constexpr auto size1 = std::tuple_size<std::decay_t<T_tuple1>>::value;
+      constexpr auto size2 = std::tuple_size<std::decay_t<T_tuple2>>::value;
+      static_assert(
+        size1 == size2, "remaining1 and remaining2 must have the same size.");
 
-    using cdr1 = typename tuple_type_cdr<std::decay_t<T_tuple1>>::type;
-    using cdr2 = typename tuple_type_cdr<std::decay_t<T_tuple2>>::type;
+      using cdr1 = typename tuple_type_cdr<std::decay_t<T_tuple1>>::type;
+      using cdr2 = typename tuple_type_cdr<std::decay_t<T_tuple2>>::type;
 
-    auto remaining_interlaced =
-      tuple_interlace_impl<cdr1, cdr2, size1 - 1>::interlace(
-        tuple_cdr(std::forward<T_tuple1>(tuple1)),
-        tuple_cdr(std::forward<T_tuple2>(tuple2)));
+      auto remaining_interlaced =
+        tuple_interlace_impl<cdr1, cdr2, size1 - 1>::interlace(
+          tuple_cdr(std::forward<T_tuple1>(tuple1)),
+          tuple_cdr(std::forward<T_tuple2>(tuple2)));
 
-    return std::tuple_cat(first_interlaced, remaining_interlaced);
-  }
-};
-
-// partial specialization for N=1:
-template <typename T_tuple1, typename T_tuple2>
-struct tuple_interlace_impl<T_tuple1, T_tuple2, 1> {
-  constexpr
-  static
-  decltype(auto)
-  interlace(T_tuple1&& tuple1, T_tuple2&& tuple2) {
-    //We don't use std::make_tuple(), to preserver std::ref()ed elements.
-    return std::tuple_cat(std::forward<T_tuple1>(tuple1), std::forward<T_tuple2>(tuple2));
-  }
-};
-
-// partial specialization for N=0:
-template <typename T_tuple1, typename T_tuple2>
-struct tuple_interlace_impl<T_tuple1, T_tuple2, 0> {
-  constexpr
-  static
-  decltype(auto)
-  interlace(T_tuple1&& tuple1, T_tuple2&& /* tuple2 */) {
-    return std::forward<T_tuple1>(tuple1);
+      return std::tuple_cat(first_interlaced, remaining_interlaced);
+    }
   }
 };
 

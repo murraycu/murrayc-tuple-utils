@@ -124,6 +124,9 @@ TEST(TestTupleEnd, StdRef) {
   auto t_larger = std::make_tuple(1, 2, std::ref(c), std::ref(d));
 
   auto t_suffix = tupleutils::tuple_end<2>(t_larger);
+  static_assert(std::tuple_size<decltype(t_suffix)>::value == 2,
+    "unexpected tuple_end()ed tuple size.");
+
   c = "hello";
   d = "world";
   //This works, but it's not what we are testing here:

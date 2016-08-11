@@ -92,7 +92,7 @@ tests_test_tuple_print_CXXFLAGS = \
 	$(COMMON_CXXFLAGS)
 tests_test_tuple_print_LDADD = \
 	$(PROJECT_LIBS)
-	
+
 tests_test_tuple_start_SOURCES = \
 	tests/test_tuple_start.cc
 tests_test_tuple_start_CXXFLAGS = \

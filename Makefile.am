@@ -19,7 +19,8 @@ SUBDIRS = $(doc_subdirs)
 pkgconfigdir = $(libdir)/pkgconfig
 nodist_pkgconfig_DATA = $(MURRAYC_TUPLE_UTILS_MODULE_NAME).pc
 
-AM_CPPFLAGS = -I$(top_builddir) -I$(top_srcdir) -I$(top_srcdir)/googletest/googletest/include
+gtest_top = googletest/googletest
+AM_CPPFLAGS = -I$(top_builddir) -I$(top_srcdir) -I$(top_srcdir)/$(gtest_top)/include
 AM_CXXFLAGS = $(PROJECT_WXXFLAGS)
 
 
@@ -33,12 +34,48 @@ libmurrayc_tuple_utils_@MURRAYC_TUPLE_UTILS_API_VERSION@_la_LDFLAGS = -no-undefi
 library_includedir = $(includedir)/$(MURRAYC_TUPLE_UTILS_MODULE_NAME)
 nobase_library_include_HEADERS = $(h_sources_public)
 
+
 # Build googletest:
 check_LTLIBRARIES = libgtest.la
-libgtest_la_SOURCES = googletest/googletest/src/gtest-all.cc googletest/googletest/src/gtest_main.cc
+libgtest_la_SOURCES = googletest/googletest/src/gtest-all.cc \
+		      googletest/googletest/src/gtest_main.cc
 
-libgtest_la_CPPFLAGS = -I$(top_srcdir)/googletest/googletest/include -I$(top_srcdir)/googletest/googletest
+libgtest_la_CPPFLAGS = -I$(top_srcdir)/$(gtest_top)/include -I$(top_srcdir)/$(gtest_top)
 libgtest_la_LDFLAGS = -pthread
+EXTRA_DIST = $(gtest_top)/src/gtest-all.cc \
+	     $(gtest_top)/src/gtest-filepath.cc \
+	     $(gtest_top)/src/gtest-printers.cc \
+	     $(gtest_top)/src/gtest.cc \
+	     $(gtest_top)/src/gtest_main.cc \
+	     $(gtest_top)/src/gtest-test-part.cc \
+	     $(gtest_top)/src/gtest-death-test.cc \
+	     $(gtest_top)/src/gtest-port.cc \
+	     $(gtest_top)/src/gtest-typed-test.cc \
+	     $(gtest_top)/src/gtest-internal-inl.h \
+	     $(gtest_top)/include/gtest/gtest-death-test.h \
+	     $(gtest_top)/include/gtest/gtest_pred_impl.h \
+	     $(gtest_top)/include/gtest/gtest-test-part.h \
+	     $(gtest_top)/include/gtest/gtest.h \
+	     $(gtest_top)/include/gtest/gtest-printers.h \
+	     $(gtest_top)/include/gtest/gtest-typed-test.h \
+	     $(gtest_top)/include/gtest/gtest-message.h \
+	     $(gtest_top)/include/gtest/gtest_prod.h \
+	     $(gtest_top)/include/gtest/gtest-param-test.h \
+	     $(gtest_top)/include/gtest/gtest-spi.h \
+	     $(gtest_top)/include/gtest/internal/gtest-death-test-internal.h \
+	     $(gtest_top)/include/gtest/internal/gtest-port-arch.h \
+	     $(gtest_top)/include/gtest/internal/gtest-filepath.h \
+	     $(gtest_top)/include/gtest/internal/gtest-port.h \
+	     $(gtest_top)/include/gtest/internal/gtest-internal.h \
+	     $(gtest_top)/include/gtest/internal/gtest-string.h \
+	     $(gtest_top)/include/gtest/internal/gtest-linked_ptr.h \
+	     $(gtest_top)/include/gtest/internal/gtest-tuple.h \
+	     $(gtest_top)/include/gtest/internal/gtest-param-util-generated.h \
+	     $(gtest_top)/include/gtest/internal/gtest-type-util.h \
+	     $(gtest_top)/include/gtest/internal/gtest-param-util.h \
+	     $(gtest_top)/include/gtest/internal/custom/gtest.h \
+	     $(gtest_top)/include/gtest/internal/custom/gtest-printers.h \
+	     $(gtest_top)/include/gtest/internal/custom/gtest-port.h
 
 # TODO: Why do we still need to specify this for each executable that we build?
 COMMON_CXXFLAGS = $(PROJECT_CFLAGS) $(PROJECT_WXXFLAGS) $(BOOST_CPPFLAGS)

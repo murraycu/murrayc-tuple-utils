@@ -19,11 +19,9 @@ SUBDIRS = $(doc_subdirs)
 pkgconfigdir = $(libdir)/pkgconfig
 nodist_pkgconfig_DATA = $(MURRAYC_TUPLE_UTILS_MODULE_NAME).pc
 
-AM_CPPFLAGS = -I$(top_builddir) -I$(top_srcdir)
+AM_CPPFLAGS = -I$(top_builddir) -I$(top_srcdir) -I$(top_srcdir)/googletest/googletest/include
 AM_CXXFLAGS = $(PROJECT_WXXFLAGS)
 
-# TODO: Why do we still need to specify this for each executable that we build?
-COMMON_CXXFLAGS = $(PROJECT_CFLAGS) $(PROJECT_WXXFLAGS) $(BOOST_CPPFLAGS)
 
 include $(top_srcdir)/tuple-utils/filelist.am
 
@@ -35,6 +33,16 @@ libmurrayc_tuple_utils_@MURRAYC_TUPLE_UTILS_API_VERSION@_la_LDFLAGS = -no-undefi
 library_includedir = $(includedir)/$(MURRAYC_TUPLE_UTILS_MODULE_NAME)
 nobase_library_include_HEADERS = $(h_sources_public)
 
+# Build googletest:
+check_LTLIBRARIES = libgtest.la
+libgtest_la_SOURCES = googletest/googletest/src/gtest-all.cc googletest/googletest/src/gtest_main.cc
+
+libgtest_la_CPPFLAGS = -I$(top_srcdir)/googletest/googletest/include -I$(top_srcdir)/googletest/googletest
+libgtest_la_LDFLAGS = -pthread
+
+# TODO: Why do we still need to specify this for each executable that we build?
+COMMON_CXXFLAGS = $(PROJECT_CFLAGS) $(PROJECT_WXXFLAGS) $(BOOST_CPPFLAGS)
+COMMON_LIBS = $(PROJECT_LIBS) libgtest.la
 
 check_PROGRAMS = \
   tests/test_tuple_cat \
@@ -56,63 +64,63 @@ tests_test_tuple_cat_SOURCES = \
 tests_test_tuple_cat_CXXFLAGS = \
 	$(COMMON_CXXFLAGS)
 tests_test_tuple_cat_LDADD = \
-	$(PROJECT_LIBS)
+	$(COMMON_LIBS)
 
 tests_test_tuple_cdr_SOURCES = \
 	tests/test_tuple_cdr.cc
 tests_test_tuple_cdr_CXXFLAGS = \
 	$(COMMON_CXXFLAGS)
 tests_test_tuple_cdr_LDADD = \
-	$(PROJECT_LIBS)
+	$(COMMON_LIBS)
 
 tests_test_tuple_end_SOURCES = \
 	tests/test_tuple_end.cc
 tests_test_tuple_end_CXXFLAGS = \
 	$(COMMON_CXXFLAGS)
 tests_test_tuple_end_LDADD = \
-	$(PROJECT_LIBS)
+	$(COMMON_LIBS)
 
 tests_test_tuple_for_each_SOURCES = \
 	tests/test_tuple_for_each.cc
 tests_test_tuple_for_each_CXXFLAGS = \
 	$(COMMON_CXXFLAGS)
 tests_test_tuple_for_each_LDADD = \
-	$(PROJECT_LIBS)
+	$(COMMON_LIBS)
 
 tests_test_tuple_interlace_SOURCES = \
 	tests/test_tuple_interlace.cc
 tests_test_tuple_interlace_CXXFLAGS = \
 	$(COMMON_CXXFLAGS)
 tests_test_tuple_interlace_LDADD = \
-	$(PROJECT_LIBS)
+	$(COMMON_LIBS)
 
 tests_test_tuple_print_SOURCES = \
 	tests/test_tuple_print.cc
 tests_test_tuple_print_CXXFLAGS = \
 	$(COMMON_CXXFLAGS)
 tests_test_tuple_print_LDADD = \
-	$(PROJECT_LIBS)
+	$(COMMON_LIBS)
 
 tests_test_tuple_start_SOURCES = \
 	tests/test_tuple_start.cc
 tests_test_tuple_start_CXXFLAGS = \
 	$(COMMON_CXXFLAGS)
 tests_test_tuple_start_LDADD = \
-	$(PROJECT_LIBS)
+	$(COMMON_LIBS)
 
 tests_test_tuple_subset_SOURCES = \
 	tests/test_tuple_subset.cc
 tests_test_tuple_subset_CXXFLAGS = \
 	$(COMMON_CXXFLAGS)
 tests_test_tuple_subset_LDADD = \
-	$(PROJECT_LIBS)
+	$(COMMON_LIBS)
 
 tests_test_tuple_transform_each_SOURCES = \
 	tests/test_tuple_transform_each.cc
 tests_test_tuple_transform_each_CXXFLAGS = \
 	$(COMMON_CXXFLAGS)
 tests_test_tuple_transform_each_LDADD = \
-	$(PROJECT_LIBS)
+	$(COMMON_LIBS)
 
 
 

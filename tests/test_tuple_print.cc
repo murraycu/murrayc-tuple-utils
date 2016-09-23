@@ -18,13 +18,11 @@
 #include <cstdlib>
 #include <sstream>
 #include <tuple-utils/tuple_print.h>
+#include "gtest/gtest.h"
 
-int
-main() {
+TEST(TestTuplePrint, Simple) {
   std::ostringstream strstream;
   const auto t = std::make_tuple(1, 2, "three");
   tupleutils::tuple_print(t, strstream);
-  assert("1, 2, three" == strstream.str());
-
-  return EXIT_SUCCESS;
+  EXPECT_EQ(strstream.str(), "1, 2, three");
 }

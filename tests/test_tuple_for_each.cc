@@ -21,6 +21,7 @@
 //#include <typeinfo>
 #include <iostream>
 #include <functional>
+#include "gtest/gtest.h"
 
 template <class T_element_from>
 class for_each_simple {
@@ -31,8 +32,7 @@ public:
   }
 };
 
-void
-test_tuple_for_each_same_types() {
+TEST(TestTupleForEach, SameType) {
   {
     auto t_original = std::make_tuple(1, 2, 3);
     tupleutils::tuple_for_each<for_each_simple>(t_original);
@@ -54,8 +54,7 @@ public:
   }
 };
 
-void
-test_tuple_for_each_same_types_with_extras() {
+TEST(TestTupleForEach, SameTypesWithExtra) {
   {
     auto t_original = std::make_tuple(1, (double)2.1f, 3);
     tupleutils::tuple_for_each<for_each_simple_with_extras>(
@@ -72,15 +71,14 @@ public:
   }
 };
 
-void
-test_tuple_for_each_same_types_with_nonconst_extras() {
+TEST(TestTupleForEach, SameTypesWithNonConstExtra) {
   {
     auto t_original = std::make_tuple(1, (double)2.1f, 3);
     int extra = 0;
 
     tupleutils::tuple_for_each<for_each_simple_with_nonconst_extras>(t_original, extra);
     // std::cout << "extra: " << extra << std::endl;
-    assert(extra == 6);
+    EXPECT_EQ(6, extra);
   }
 }
 
@@ -134,8 +132,7 @@ public:
   }
 };
 
-void
-test_tuple_for_each_multiple_types() {
+TEST(TestTupleForEach, MultipleTypes) {
   auto t_original = std::make_tuple(1, (double)2.1f, std::string("3"));
   tupleutils::tuple_for_each<visitor_with_specializations>(t_original);
 }
@@ -150,18 +147,16 @@ public:
   }
 };
 
-void
-test_tuple_for_each_nonconst() {
+TEST(TestTupleForEach, NonConst) {
   auto t = std::make_tuple(1, 2, 3);
   tupleutils::tuple_for_each<for_each_nonconst, decltype(t)&>(t);
   std::cout << std::get<0>(t) << std::endl;
-  assert(std::get<0>(t) == 2);
-  assert(std::get<1>(t) == 4);
-  assert(std::get<2>(t) == 6);
+  EXPECT_EQ(2, std::get<0>(t));
+  EXPECT_EQ(4, std::get<1>(t));
+  EXPECT_EQ(6, std::get<2>(t));
 }
 
-void
-test_tuple_for_each_stdref() {
+TEST(TestTupleForEach, StdRef) {
   {
     int a = 1;
     int b = 2;
@@ -176,9 +171,9 @@ test_tuple_for_each_stdref() {
     int c = 3;
     auto t_original = std::make_tuple(std::ref(a), std::ref(b), std::ref(c));
     tupleutils::tuple_for_each<for_each_nonconst>(t_original);
-    assert(a == 2);
-    assert(b == 4);
-    assert(c == 6);
+    EXPECT_EQ(2, a);
+    EXPECT_EQ(4, b);
+    EXPECT_EQ(6, c);
   }
 }
 
@@ -194,45 +189,23 @@ public:
   }
 };
 
-void
-test_tuple_for_each_correct_sequence() {
+TEST(TestTupleForEach, CorrectSequence) {
   correct_sequence_output.clear();
   auto t = std::make_tuple(1, 2, 3);
   tupleutils::tuple_for_each<for_each_correct_sequence>(t);
   //std::cout << "correct_sequence_output: " << correct_sequence_output << std::endl;
-  assert(correct_sequence_output == "123");
+  EXPECT_EQ("123", correct_sequence_output);
 }
 
-void
-test_tuple_for_each_empty_tuple() {
+TEST(TestTupleForEach, EmptyTuple) {
   auto t = std::tuple<>();
   tupleutils::tuple_for_each<for_each_simple>(t);
 }
 
-constexpr
-void
-test_tuple_for_each_constexpr() {
+// TODO: Does this test function itself need to be constexpr,
+// and if so, how can we do that with googletest?
+TEST(TestTupleForEach, ConstExpr) {
   constexpr auto t_original = std::make_tuple(1, (double)2.1f, "3");
   tupleutils::tuple_for_each<visitor_with_specializations>(t_original);
 }
 
-int
-main() {
-  test_tuple_for_each_same_types();
-  test_tuple_for_each_same_types_with_extras();
-  test_tuple_for_each_same_types_with_nonconst_extras();
-
-  test_tuple_for_each_multiple_types();
-
-  test_tuple_for_each_nonconst();
-
-  test_tuple_for_each_stdref();
-
-  test_tuple_for_each_correct_sequence();
-
-  test_tuple_for_each_empty_tuple();
-
-  test_tuple_for_each_constexpr();
-
-  return EXIT_SUCCESS;
-}

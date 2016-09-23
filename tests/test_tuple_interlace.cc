@@ -2,9 +2,9 @@
 #include <cstdlib>
 #include <tuple-utils/tuple_interlace.h>
 #include <utility>
+#include <gtest/gtest.h>
 
-void
-test_tuple_type_interlace_empty() {
+TEST(TestTupleInterlace, TypeEmpty) {
   using type_tuple1 = std::tuple<>;
   using type_tuple2 = std::tuple<>;
   using type_tuple12 = std::tuple<>;
@@ -16,8 +16,7 @@ test_tuple_type_interlace_empty() {
     "unexpected tuple_interlace()ed tuple type");
 }
 
-void
-test_tuple_type_interlace() {
+TEST(TestTupleInterlace, Type) {
   using type_tuple_is = std::tuple<int, short>;
   using type_tuple_dc = std::tuple<double, char>;
   using type_tuple_idsc = std::tuple<int, double, short, char>;
@@ -29,8 +28,7 @@ test_tuple_type_interlace() {
     "unexpected tuple_interlace()ed tuple type");
 }
 
-void
-test_tuple_interlace_empty() {
+TEST(TestTupleInterlace, Empty) {
   using type_tuple1 = std::tuple<>;
   using type_tuple2 = std::tuple<>;
   using type_tuple12 = std::tuple<>;
@@ -43,8 +41,7 @@ test_tuple_interlace_empty() {
     "unexpected interlaced tuple type");
 }
 
-void
-test_tuple_interlace() {
+TEST(TestTupleInterlace, Simple) {
   using type_tuple_is = std::tuple<int, short>;
   using type_tuple_dc = std::tuple<double, char>;
   using type_tuple_idsc = std::tuple<int, double, short, char>;
@@ -57,14 +54,13 @@ test_tuple_interlace() {
     std::is_same<decltype(tuple_interlaced), type_tuple_idsc>::value,
     "unexpected interlaced tuple type");
 
-  assert(std::get<0>(tuple_interlaced) == 1);
-  assert(std::get<1>(tuple_interlaced) == 3.0);
-  assert(std::get<2>(tuple_interlaced) == 2);
-  assert(std::get<3>(tuple_interlaced) == '4');
+  EXPECT_EQ(1, std::get<0>(tuple_interlaced));
+  EXPECT_EQ(3.0, std::get<1>(tuple_interlaced));
+  EXPECT_EQ(2, std::get<2>(tuple_interlaced));
+  EXPECT_EQ('4', std::get<3>(tuple_interlaced));
 }
 
-void
-test_tuple_interlace_constexpr() {
+TEST(TestTupleInterlace, ConstExpr) {
   using type_tuple_is = std::tuple<int, short>;
   using type_tuple_dc = std::tuple<double, char>;
 
@@ -73,21 +69,8 @@ test_tuple_interlace_constexpr() {
 
   constexpr auto tuple_interlaced = tupleutils::tuple_interlace(tuple_is, tuple_dc);
 
-  assert(std::get<0>(tuple_interlaced) == 1);
-  assert(std::get<1>(tuple_interlaced) == 3.0);
-  assert(std::get<2>(tuple_interlaced) == 2);
-  assert(std::get<3>(tuple_interlaced) == '4');
-}
-
-int
-main() {
-  test_tuple_type_interlace_empty();
-  test_tuple_type_interlace();
-
-  test_tuple_interlace_empty();
-  test_tuple_interlace();
-
-  test_tuple_interlace_constexpr();
-
-  return EXIT_SUCCESS;
+  EXPECT_EQ(1, std::get<0>(tuple_interlaced));
+  EXPECT_EQ(3.0, std::get<1>(tuple_interlaced));
+  EXPECT_EQ(2, std::get<2>(tuple_interlaced));
+  EXPECT_EQ('4', std::get<3>(tuple_interlaced));
 }

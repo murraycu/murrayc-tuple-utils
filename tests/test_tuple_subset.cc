@@ -17,9 +17,9 @@
 #include <cassert>
 #include <cstdlib>
 #include <tuple-utils/tuple_subset.h>
+#include "gtest/gtest.h"
 
-void
-test_tuple_type_subset() {
+TEST(TestTupleSubset, Type) {
   {
     using type_tuple = std::tuple<int, short, double>;
     using type_tuple_subset =
@@ -71,8 +71,7 @@ test_tuple_type_subset() {
   }
 }
 
-void
-test_tuple_subset() {
+TEST(TestTupleSubset, Simple) {
   {
     auto t_original =
       std::make_tuple(nullptr, std::string("hello"), std::string("world"));
@@ -81,9 +80,9 @@ test_tuple_subset() {
     static_assert(std::tuple_size<decltype(t_subset)>::value == 3,
       "unexpected tuple_subset()ed tuple size.");
 
-    assert(std::get<0>(t_subset) == nullptr);
-    assert(std::get<1>(t_subset) == "hello");
-    assert(std::get<2>(t_subset) == "world");
+    EXPECT_EQ(nullptr, std::get<0>(t_subset));
+    EXPECT_EQ("hello", std::get<1>(t_subset));
+    EXPECT_EQ("world", std::get<2>(t_subset));
 
     static_assert(std::is_same<decltype(t_subset), decltype(t_original)>::value,
       "unexpected start()ed tuple type");
@@ -97,8 +96,8 @@ test_tuple_subset() {
     static_assert(std::tuple_size<decltype(t_subset)>::value == 2,
       "unexpected tuple_subset()ed tuple size.");
 
-    assert(std::get<0>(t_subset) == nullptr);
-    assert(std::get<1>(t_subset) == "hello");
+    EXPECT_EQ(nullptr, std::get<0>(t_subset));
+    EXPECT_EQ("hello", std::get<1>(t_subset));
 
     using type_tuple_subset = std::tuple<std::nullptr_t, std::string>;
     static_assert(std::is_same<decltype(t_subset), type_tuple_subset>::value,
@@ -113,7 +112,7 @@ test_tuple_subset() {
     static_assert(std::tuple_size<decltype(t_subset)>::value == 1,
       "unexpected tuple_subset()ed tuple size.");
 
-    assert(std::get<0>(t_subset) == nullptr);
+    EXPECT_EQ(nullptr, std::get<0>(t_subset));
 
     using type_tuple_subset = std::tuple<std::nullptr_t>;
     static_assert(std::is_same<decltype(t_subset), type_tuple_subset>::value,
@@ -128,7 +127,7 @@ test_tuple_subset() {
     static_assert(std::tuple_size<decltype(t_subset)>::value == 1,
       "unexpected tuple_subset()ed tuple size.");
 
-    assert(std::get<0>(t_subset) == "hello");
+    EXPECT_EQ("hello", std::get<0>(t_subset));
 
     using type_tuple_subset = std::tuple<std::string>;
     static_assert(std::is_same<decltype(t_subset), type_tuple_subset>::value,
@@ -136,9 +135,7 @@ test_tuple_subset() {
   }
 }
 
-constexpr
-void
-test_tuple_subset_constexpr() {
+TEST(TestTupleSubset, ConstExpr) {
   constexpr auto str_hello = "hello";
   constexpr auto str_world = "world";
 
@@ -149,16 +146,6 @@ test_tuple_subset_constexpr() {
   static_assert(std::tuple_size<decltype(t_subset)>::value == 2,
     "unexpected tuple_subset()ed tuple size.");
 
-  assert(std::get<0>(t_subset) == nullptr);
-  assert(std::get<1>(t_subset) == str_hello);
-}
-
-int
-main() {
-  test_tuple_type_subset();
-  test_tuple_subset();
-
-  test_tuple_subset_constexpr();
-
-  return EXIT_SUCCESS;
+  EXPECT_EQ(nullptr, std::get<0>(t_subset));
+  EXPECT_EQ(str_hello, std::get<1>(t_subset));
 }

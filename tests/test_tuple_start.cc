@@ -18,9 +18,9 @@
 #include <cstdlib>
 #include <tuple-utils/tuple_start.h>
 #include <functional>
+#include "gtest/gtest.h"
 
-void
-test_tuple_type_start() {
+TEST(TestTupleStart, Type) {
   {
     using type_tuple = std::tuple<int, short, double>;
     using type_tuple_start = tupleutils::tuple_type_start<type_tuple, 1>::type;
@@ -49,8 +49,7 @@ test_tuple_type_start() {
   }
 }
 
-void
-test_tuple_start() {
+TEST(TestTupleStart, Simple) {
   //Check that tuple_star<0> returns an empty tuple:
   {
     auto t_original =
@@ -73,9 +72,9 @@ test_tuple_start() {
     static_assert(std::tuple_size<decltype(t_prefix)>::value == 3,
       "unexpected tuple_start()ed tuple size.");
 
-    assert(std::get<0>(t_prefix) == nullptr);
-    assert(std::get<1>(t_prefix) == "hello");
-    assert(std::get<2>(t_prefix) == "world");
+    EXPECT_EQ(nullptr, std::get<0>(t_prefix));
+    EXPECT_EQ("hello", std::get<1>(t_prefix));
+    EXPECT_EQ("world", std::get<2>(t_prefix));
 
     static_assert(std::is_same<decltype(t_prefix), decltype(t_original)>::value,
       "unexpected start()ed tuple type");
@@ -89,8 +88,8 @@ test_tuple_start() {
     static_assert(std::tuple_size<decltype(t_prefix)>::value == 2,
       "unexpected tuple_start()ed tuple size.");
 
-    assert(std::get<0>(t_prefix) == nullptr);
-    assert(std::get<1>(t_prefix) == "hello");
+    EXPECT_EQ(nullptr, std::get<0>(t_prefix));
+    EXPECT_EQ("hello", std::get<1>(t_prefix));
 
     using type_tuple_prefix = std::tuple<std::nullptr_t, std::string>;
     static_assert(std::is_same<decltype(t_prefix), type_tuple_prefix>::value,
@@ -105,7 +104,7 @@ test_tuple_start() {
     static_assert(std::tuple_size<decltype(t_prefix)>::value == 1,
       "unexpected tuple_start()ed tuple size.");
 
-    assert(std::get<0>(t_prefix) == nullptr);
+    EXPECT_EQ(nullptr, std::get<0>(t_prefix));
 
     using type_tuple_prefix = std::tuple<std::nullptr_t>;
     static_assert(std::is_same<decltype(t_prefix), type_tuple_prefix>::value,
@@ -113,8 +112,7 @@ test_tuple_start() {
   }
 }
 
-void
-test_tuple_start_stdref() {
+TEST(TestTupleStart, StdRef) {
   std::string a = "yadda";
   std::string b = "yaddayadda";
   auto t_larger = std::make_tuple(std::ref(a), std::ref(b), 1);
@@ -125,13 +123,13 @@ test_tuple_start_stdref() {
   //This works, but it's not what we are testing here:
   //assert(std::get<0>(t_larger) == "hello");
 
-  assert(std::get<0>(t_prefix) == "hello");
-  assert(std::get<1>(t_prefix) == "world");
+  EXPECT_EQ("hello", std::get<0>(t_prefix));
+  EXPECT_EQ("world", std::get<1>(t_prefix));
 }
 
-constexpr
-void
-test_tuple_start_constexpr() {
+// TODO: Does this test function itself need to be constexpr,
+// and if so, how can we do that with googletest?
+TEST(TestTupleStart, ConstExpr) {
   constexpr auto str_hello = "hello";
   constexpr auto str_world = "hello";
 
@@ -144,15 +142,7 @@ test_tuple_start_constexpr() {
 
   static_assert(std::get<0>(t_prefix) == nullptr,
     "unexpected tuple element value.");
+
   static_assert(std::get<1>(t_prefix) == str_hello,
     "unexpected tuple element value.");
-}
-
-int
-main() {
-  test_tuple_type_start();
-  test_tuple_start();
-  test_tuple_start_stdref();
-
-  test_tuple_start_constexpr();
 }

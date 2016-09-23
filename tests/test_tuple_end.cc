@@ -18,9 +18,9 @@
 #include <cstdlib>
 #include <tuple-utils/tuple_end.h>
 #include <functional>
+#include <gtest/gtest.h>
 
-void
-test_tuple_type_end() {
+TEST(TupleEndTest, Type) {
   {
     using type_tuple = std::tuple<int, short, double>;
     using type_tuple_end = tupleutils::tuple_type_end<type_tuple, 1>::type;
@@ -55,8 +55,7 @@ test_tuple_type_end() {
   }
 }
 
-void
-test_tuple_end() {
+TEST(TupleEndTest, Simple) {
 
   // Test that tuple_end<0> gives an empty tuple:
   {
@@ -80,9 +79,9 @@ test_tuple_end() {
     static_assert(std::tuple_size<decltype(t_suffix)>::value == 3,
       "unexpected tuple_end()ed tuple size.");
 
-    assert(std::get<0>(t_suffix) == nullptr);
-    assert(std::get<1>(t_suffix) == "hello");
-    assert(std::get<2>(t_suffix) == "world");
+    EXPECT_EQ(nullptr, std::get<0>(t_suffix));
+    EXPECT_EQ("hello", std::get<1>(t_suffix));
+    EXPECT_EQ("world", std::get<2>(t_suffix));
 
     static_assert(std::is_same<decltype(t_suffix), decltype(t_original)>::value,
       "unexpected end()ed tuple type");
@@ -96,8 +95,8 @@ test_tuple_end() {
     static_assert(std::tuple_size<decltype(t_suffix)>::value == 2,
       "unexpected tuple_end()ed tuple size.");
 
-    assert(std::get<0>(t_suffix) == "hello");
-    assert(std::get<1>(t_suffix) == "world");
+    EXPECT_EQ("hello", std::get<0>(t_suffix));
+    EXPECT_EQ("world", std::get<1>(t_suffix));
 
     using type_tuple_suffix = std::tuple<std::string, std::string>;
     static_assert(std::is_same<decltype(t_suffix), type_tuple_suffix>::value,
@@ -112,7 +111,7 @@ test_tuple_end() {
     static_assert(std::tuple_size<decltype(t_suffix)>::value == 1,
       "unexpected tuple_end()ed tuple size.");
 
-    assert(std::get<0>(t_suffix) == "world");
+    EXPECT_EQ("world", std::get<0>(t_suffix)); 
 
     using type_tuple_suffix = std::tuple<std::string>;
     static_assert(std::is_same<decltype(t_suffix), type_tuple_suffix>::value,
@@ -120,8 +119,7 @@ test_tuple_end() {
   }
 }
 
-void
-test_tuple_end_stdref() {
+TEST(TestTupleEnd, StdRef) {
   std::string c = "yadda";
   std::string d = "yaddayadda";
   auto t_larger = std::make_tuple(1, 2, std::ref(c), std::ref(d));
@@ -132,14 +130,14 @@ test_tuple_end_stdref() {
   //This works, but it's not what we are testing here:
   //assert(std::get<0>(t_larger) == "hello");
 
-  assert(std::get<0>(t_suffix) == "hello");
-  assert(std::get<1>(t_suffix) == "world");
+  EXPECT_EQ("hello", std::get<0>(t_suffix));
+  EXPECT_EQ("world", std::get<1>(t_suffix));
 }
 
 
-constexpr
-void
-test_tuple_end_constexpr() {
+// TODO: Does this test function itself need to be constexpr,
+// and if so, how can we do that with googletest?
+TEST(TestTupleEnd, ConstExpr) {
   constexpr auto str_hello = "hello";
   constexpr auto str_world = "world";
 
@@ -150,17 +148,7 @@ test_tuple_end_constexpr() {
   static_assert(std::tuple_size<decltype(t_suffix)>::value == 2,
     "unexpected tuple_end()ed tuple size.");
 
-  assert(std::get<0>(t_suffix) == str_hello);
-  assert(std::get<1>(t_suffix) == str_world);
+  EXPECT_EQ(str_hello, std::get<0>(t_suffix));
+  EXPECT_EQ(str_world, std::get<1>(t_suffix));
 }
 
-int
-main() {
-  test_tuple_type_end();
-  test_tuple_end();
-  test_tuple_end_stdref();
-
-  test_tuple_end_constexpr();
-
-  return EXIT_SUCCESS;
-}

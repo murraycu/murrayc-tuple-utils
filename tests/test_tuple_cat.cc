@@ -19,9 +19,9 @@
 #include <tuple-utils/tuple_cat.h>
 #include <utility>
 //#include <functional>
+#include "gtest/gtest.h"
 
-void
-test_tuple_type_cat() {
+TEST(TupleCatTest, Simple) {
   using type_tuple_is = std::tuple<int, short>;
   using type_tuple_dc = std::tuple<double, char>;
   using type_tuple_cat =
@@ -36,8 +36,7 @@ test_tuple_type_cat() {
 
 /** We don't want to test std::tuple_cat() here,
  * but this a demonstration that std::ref() works with std::tuple_cat().
-void
-test_tuple_cat_stdref() {
+TEST(TupleCatText, StdRef) {
   std::string a = "yadda1";
   std::string b = "yaddayadda1";
   auto t_one =
@@ -52,20 +51,10 @@ test_tuple_cat_stdref() {
   c = 3;
   d = 'b';
 
-  assert(std::get<0>(t_both) == "hello");
-  assert(std::get<1>(t_both) == "world");
-  assert(std::get<2>(t_both) == 3);
-  assert(std::get<3>(t_both) == 'b');
+  EXPECT_EQ("hello", std::get<0>(t_both));
+  EXPECT_EQ("world", std::get<1>(t_both));
+  EXPECT_EQ(3, std::get<2>(t_both));
+  EXPECT_EQ('b', std::get<3>(t_both));
 }
 */
 
-int
-main() {
-  test_tuple_type_cat();
-  // There is no typeutils::tuple_cat() because std::tuple_cat() exists:
-  // test_tuple_cat();
-
-  //test_tuple_cat_stdref();
-
-  return EXIT_SUCCESS;
-}

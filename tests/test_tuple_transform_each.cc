@@ -19,6 +19,7 @@
 #include <tuple-utils/tuple_transform_each.h>
 #include <utility>
 #include <functional>
+#include <gtest/gtest.h>
 
 template <class T_element_from>
 class transform_to_string {
@@ -29,8 +30,7 @@ public:
   }
 };
 
-void
-test_tuple_type_transform_each_same_types() {
+TEST(TestTupleTransformEach, TypeSameTypes) {
   using type_tuple_original = std::tuple<int, int>;
   using type_tuple_transformed =
     tupleutils::tuple_type_transform_each<type_tuple_original,
@@ -43,8 +43,7 @@ test_tuple_type_transform_each_same_types() {
 }
 
 // In these tests, t_expected has elements all of the same type.
-void
-test_tuple_transform_each_same_types() {
+TEST(TestTupleTransformEach, SameTypes) {
   {
     auto t_original = std::make_tuple(1, 2, 3);
     auto t_transformed =
@@ -55,9 +54,9 @@ test_tuple_transform_each_same_types() {
     static_assert(std::tuple_size<decltype(t_transformed)>::value == 3,
       "unexpected tuple_transform_each()ed tuple size.");
 
-    assert(std::get<0>(t_transformed) == "1");
-    assert(std::get<1>(t_transformed) == "2");
-    assert(std::get<2>(t_transformed) == "3");
+    EXPECT_EQ("1", std::get<0>(t_transformed));
+    EXPECT_EQ("2", std::get<1>(t_transformed));
+    EXPECT_EQ("3", std::get<2>(t_transformed));
 
     static_assert(
       std::is_same<decltype(t_transformed), decltype(t_expected)>::value,
@@ -74,9 +73,9 @@ test_tuple_transform_each_same_types() {
     static_assert(std::tuple_size<decltype(t_transformed)>::value == 3,
       "unexpected tuple_transform_each()ed tuple size.");
 
-    assert(std::get<0>(t_transformed) == "1");
-    assert(std::get<1>(t_transformed).substr(0, 3) == "2.1");
-    assert(std::get<2>(t_transformed) == "3");
+    EXPECT_EQ("1", std::get<0>(t_transformed));
+    EXPECT_EQ("2.1", std::get<1>(t_transformed).substr(0, 3));
+    EXPECT_EQ("3", std::get<2>(t_transformed));
 
     static_assert(
       std::is_same<decltype(t_transformed), decltype(t_expected)>::value,
@@ -120,8 +119,7 @@ public:
   }
 };
 
-void
-test_tuple_type_transform_each_multiple_types() {
+TEST(TestTupleTransformEach, TypeMultipeTypes) {
   using type_tuple_original = std::tuple<int, double, std::string>;
   using type_tuple_transformed =
     tupleutils::tuple_type_transform_each<type_tuple_original,
@@ -133,9 +131,7 @@ test_tuple_type_transform_each_multiple_types() {
     "unexpected tuple_transform_each()ed tuple type");
 }
 
-// In these tests, t_expected has elements of different types.
-void
-test_tuple_transform_each_multiple_types() {
+TEST(TestTupleTransformEach, MultipleTypes) {
   auto t_original = std::make_tuple(1, (double)2.1f, std::string("3"));
   auto t_transformed =
     tupleutils::tuple_transform_each<transform_to_something>(t_original);
@@ -144,9 +140,9 @@ test_tuple_transform_each_multiple_types() {
   static_assert(std::tuple_size<decltype(t_transformed)>::value == 3,
     "unexpected tuple_transform_each()ed tuple size.");
 
-  assert(std::get<0>(t_transformed) == "1");
-  assert(std::get<1>(t_transformed) == '2');
-  assert(std::get<2>(t_transformed) == 3);
+  EXPECT_EQ("1", std::get<0>(t_transformed));
+  EXPECT_EQ('2', std::get<1>(t_transformed));
+  EXPECT_EQ(3, std::get<2>(t_transformed));
 
   static_assert(
     std::is_same<decltype(t_transformed), decltype(t_expected)>::value,
@@ -165,25 +161,23 @@ public:
   }
 };
 
-void
-test_tuple_transform_each_nonconst() {
+TEST(TestTupleTransformEach, NonConst) {
   auto t = std::make_tuple(1, 2, 3);
   auto t_transformed =
     tupleutils::tuple_transform_each<transform_each_nonconst>(t);
 
   // Check that t was changed (from * 2):
-  assert(std::get<0>(t) == 2);
-  assert(std::get<1>(t) == 4);
-  assert(std::get<2>(t) == 6);
+  EXPECT_EQ(2, std::get<0>(t));
+  EXPECT_EQ(4, std::get<1>(t));
+  EXPECT_EQ(6, std::get<2>(t));
 
   // Check that t_transformed has the expected values ( from * 2 * 10):
-  assert(std::get<0>(t_transformed) == 20);
-  assert(std::get<1>(t_transformed) == 40);
-  assert(std::get<2>(t_transformed) == 60);
+  EXPECT_EQ(20, std::get<0>(t_transformed));
+  EXPECT_EQ(40, std::get<1>(t_transformed));
+  EXPECT_EQ(60, std::get<2>(t_transformed));
 }
 
-void
-test_tuple_transform_each_stdref() {
+TEST(TestTupleTransformEach, StdRef) {
   int a = 1;
   int b = 2;
   int c = 3;
@@ -196,9 +190,9 @@ test_tuple_transform_each_stdref() {
   static_assert(std::tuple_size<decltype(t_transformed)>::value == 3,
     "unexpected tuple_transform_each()ed tuple size.");
 
-  assert(std::get<0>(t_transformed) == "1");
-  assert(std::get<1>(t_transformed) == "2");
-  assert(std::get<2>(t_transformed) == "3");
+  EXPECT_EQ("1", std::get<0>(t_transformed));
+  EXPECT_EQ("2", std::get<1>(t_transformed));
+  EXPECT_EQ("3", std::get<2>(t_transformed));
 
   static_assert(
     std::is_same<decltype(t_transformed), decltype(t_expected)>::value,
@@ -238,8 +232,7 @@ public:
   }
 };
 
-void
-test_tuple_transform_each_stdref_non_copyable() {
+TEST(TestTupleTransformEach, StdRefNonCopyable) {
   NonCopyable a(1);
   NonCopyable b(2);
   NonCopyable c(3);
@@ -252,9 +245,9 @@ test_tuple_transform_each_stdref_non_copyable() {
   static_assert(std::tuple_size<decltype(t_transformed)>::value == 3,
     "unexpected tuple_transform_each()ed tuple size.");
 
-  assert(std::get<0>(t_transformed) == "1");
-  assert(std::get<1>(t_transformed) == "2");
-  assert(std::get<2>(t_transformed) == "3");
+  EXPECT_EQ("1", std::get<0>(t_transformed));
+  EXPECT_EQ("2", std::get<1>(t_transformed));
+  EXPECT_EQ("3", std::get<2>(t_transformed));
 
   static_assert(
     std::is_same<decltype(t_transformed), decltype(t_expected)>::value,
@@ -273,17 +266,15 @@ public:
   }
 };
 
-void
-test_tuple_transform_each_correct_sequence() {
+TEST(TestTupleTransformEach, CorrectSequence) {
   correct_sequence_output.clear();
   auto t = std::make_tuple(1, 2, 3);
   tupleutils::tuple_transform_each<transform_each_correct_sequence>(t);
   //std::cout << "correct_sequence_output: " << correct_sequence_output << std::endl;
-  assert(correct_sequence_output == "123");
+  EXPECT_EQ("123", correct_sequence_output);
 }
 
-void
-test_tuple_transform_each_empty_tuple() {
+TEST(TestTupleTransformEach, EmptyTuple) {
   auto t = std::tuple<>();
   tupleutils::tuple_transform_each<transform_to_string>(t);
 }
@@ -318,10 +309,12 @@ public:
   }
 };
 
-/* TODO: See the comment in main().
-constexpr
-void
-test_tuple_transform_each_constexpr() {
+/*
+// g++ 5.2.1 gives this error:
+//   error: accessing uninitialized member ‘std::tuple<char>::<anonymous>’
+// though it works with clang++.
+// TODO: Try it with a newer g++.
+TEST(TestTupleTransformEach, ConstExpr) {
   constexpr auto t_original = std::make_tuple(1, (double)2.1f);
   constexpr auto t_transformed =
     tupleutils::tuple_transform_each<transform_as_constexpr_to_something>(t_original);
@@ -330,8 +323,8 @@ test_tuple_transform_each_constexpr() {
   static_assert(std::tuple_size<decltype(t_transformed)>::value == 2,
     "unexpected tuple_transform_each()ed tuple size.");
 
-  assert(std::get<0>(t_transformed) == 'b');
-  assert(std::get<1>(t_transformed) == 2);
+  EXPECT_EQ('b', std::get<0>(t_transformed));
+  EXPECT_EQ(2, std::get<1>(t_transformed));
 
   static_assert(
     std::is_same<decltype(t_transformed), decltype(t_expected)>::value,
@@ -339,28 +332,3 @@ test_tuple_transform_each_constexpr() {
 }
 */
 
-int
-main() {
-  test_tuple_type_transform_each_same_types();
-  test_tuple_type_transform_each_multiple_types();
-
-  test_tuple_transform_each_same_types();
-  test_tuple_transform_each_multiple_types();
-
-  test_tuple_transform_each_nonconst();
-
-  test_tuple_transform_each_stdref();
-  test_tuple_transform_each_stdref_non_copyable();
-
-  test_tuple_transform_each_correct_sequence();
-
-  test_tuple_transform_each_empty_tuple();
-
-  // g++ 5.2.1 gives this error:
-  //   error: accessing uninitialized member ‘std::tuple<char>::<anonymous>’
-  // though it works with clang++.
-  // TODO: Try it with a newer g++.
-  //test_tuple_transform_each_constexpr();
-
-  return EXIT_SUCCESS;
-}

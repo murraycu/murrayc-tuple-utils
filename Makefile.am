@@ -161,4 +161,5 @@ tests_test_tuple_transform_each_LDADD = \
 
 
 
+CLEANFILES = stamp-h2
 

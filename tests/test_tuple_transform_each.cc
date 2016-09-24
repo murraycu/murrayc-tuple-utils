@@ -16,7 +16,6 @@
 
 #include <cstdlib>
 #include <tuple-utils/tuple_transform_each.h>
-#include <utility>
 #include <functional>
 #include <gtest/gtest.h>
 

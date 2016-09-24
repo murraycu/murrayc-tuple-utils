@@ -81,7 +81,6 @@ tests/test_tuple_start
 tests/test_tuple_subset
 tests/test_tuple_transform_each
 
-
-
-
+CMakeCache.txt
+cmake_uninstall.cmake
 

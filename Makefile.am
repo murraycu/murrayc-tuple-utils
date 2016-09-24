@@ -16,6 +16,8 @@ endif
 
 SUBDIRS = $(doc_subdirs)
 
+dist_noinst_SCRIPTS = autogen.sh
+
 pkgconfigdir = $(libdir)/pkgconfig
 nodist_pkgconfig_DATA = $(MURRAYC_TUPLE_UTILS_MODULE_NAME).pc
 

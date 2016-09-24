@@ -19,6 +19,11 @@ SUBDIRS = $(doc_subdirs)
 pkgconfigdir = $(libdir)/pkgconfig
 nodist_pkgconfig_DATA = $(MURRAYC_TUPLE_UTILS_MODULE_NAME).pc
 
+# Put the CMake build files in the tarball created by autotools' "make distcheck".
+dist_noinst_DATA = CMakeLists.txt \
+		   cmake_uninstall.cmake.in \
+		   tests/CMakeLists.txt
+
 gtest_top = googletest/googletest
 AM_CPPFLAGS = -I$(top_builddir) -I$(top_srcdir) -I$(top_srcdir)/$(gtest_top)/include
 AM_CXXFLAGS = $(PROJECT_WXXFLAGS)

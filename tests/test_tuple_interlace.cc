@@ -1,4 +1,3 @@
-#include <cassert>
 #include <cstdlib>
 #include <tuple-utils/tuple_interlace.h>
 #include <utility>

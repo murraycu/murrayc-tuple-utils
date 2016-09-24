@@ -14,7 +14,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
 
-#include <cassert>
 #include <cstdlib>
 #include <tuple-utils/tuple_subset.h>
 #include "gtest/gtest.h"

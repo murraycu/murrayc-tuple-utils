@@ -30,9 +30,9 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-3.7
+            - llvm-toolchain-trusty-3.8
           packages:
-            - clang-3.7
-      env: COMPILER=clang++-3.7
+            - clang-3.8
+      env: COMPILER=clang++-3.8
 
 script: ./autogen.sh CXX=$COMPILER --enable-warnings=fatal && make && make check

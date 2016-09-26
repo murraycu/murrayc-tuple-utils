@@ -32,6 +32,7 @@ matrix:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-trusty-3.8
           packages:
+            - libstdc++-6-dev
             - clang-3.8
       env: COMPILER=clang++-3.8
 

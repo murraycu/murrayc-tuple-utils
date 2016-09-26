@@ -1,1 +1,3 @@
 language: cpp
+
+script: ./autogen.sh --enable-warnings=fatal && ./configure && make && make check

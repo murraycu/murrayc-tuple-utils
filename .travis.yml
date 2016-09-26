@@ -1,3 +1,7 @@
 language: cpp
 
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y mm-common
+
 script: ./autogen.sh --enable-warnings=fatal && ./configure && make && make check

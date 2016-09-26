@@ -20,7 +20,7 @@ AX_CXX_COMPILE_STDCXX([14], [noext], [mandatory])
 LT_PREREQ([2.2.6])
 LT_INIT([win32-dll])
 
-MM_PREREQ([0.9.8])
+MM_PREREQ([0.9.5])
 MM_INIT_MODULE([murrayc-tuple-utils-1.0])
 
 # Tell mm-common-prepare to copy the mm-common .pl scripts

@@ -1,6 +1,8 @@
 # murrayc-tuple-utils
 A rough collection of code to manipulate C++ std::tuple&lt;>s.
 
+[![Build Status](https://travis-ci.org/murraycu/murrayc-tuple-utils.svg?branch=master)](https://travis-ci.org/murraycu/murrayc-tuple-utils)
+
 ## Basic Usage
 
 Include the specific header. For instance,

@@ -26,11 +26,6 @@ dist_noinst_DATA = CMakeLists.txt \
 		   cmake_uninstall.cmake.in \
 		   tests/CMakeLists.txt
 
-gtest_top = googletest/googletest
-AM_CPPFLAGS = -I$(top_builddir) -I$(top_srcdir) -I$(top_srcdir)/$(gtest_top)/include
-AM_CXXFLAGS = $(PROJECT_WXXFLAGS)
-
-
 include $(top_srcdir)/tuple-utils/filelist.am
 
 lib_LTLIBRARIES = libmurrayc-tuple-utils-@MURRAYC_TUPLE_UTILS_API_VERSION@.la
@@ -43,6 +38,7 @@ nobase_library_include_HEADERS = $(h_sources_public)
 
 
 # Build googletest:
+gtest_top = googletest/googletest
 check_LTLIBRARIES = libgtest.la
 libgtest_la_SOURCES = googletest/googletest/src/gtest-all.cc \
 		      googletest/googletest/src/gtest_main.cc
@@ -85,8 +81,9 @@ EXTRA_DIST = $(gtest_top)/src/gtest-all.cc \
 	     $(gtest_top)/include/gtest/internal/custom/gtest-printers.h \
 	     $(gtest_top)/include/gtest/internal/custom/gtest-port.h
 
-# TODO: Why do we still need to specify this for each executable that we build?
 COMMON_CXXFLAGS = $(PROJECT_CFLAGS) $(PROJECT_WXXFLAGS) $(BOOST_CPPFLAGS)
+COMMON_CPPFLAGS = -I$(top_builddir) -I$(top_srcdir) \
+		  -isystem $(top_srcdir)/$(gtest_top)/include
 COMMON_LIBS = $(PROJECT_LIBS) libgtest.la
 
 check_PROGRAMS = \
@@ -106,6 +103,8 @@ TESTS = $(check_PROGRAMS)
 
 tests_test_tuple_cat_SOURCES = \
 	tests/test_tuple_cat.cc
+tests_test_tuple_cat_CPPFLAGS = \
+	$(COMMON_CPPFLAGS)
 tests_test_tuple_cat_CXXFLAGS = \
 	$(COMMON_CXXFLAGS)
 tests_test_tuple_cat_LDADD = \
@@ -113,6 +112,8 @@ tests_test_tuple_cat_LDADD = \
 
 tests_test_tuple_cdr_SOURCES = \
 	tests/test_tuple_cdr.cc
+tests_test_tuple_cdr_CPPFLAGS = \
+	$(COMMON_CPPFLAGS)
 tests_test_tuple_cdr_CXXFLAGS = \
 	$(COMMON_CXXFLAGS)
 tests_test_tuple_cdr_LDADD = \
@@ -120,6 +121,8 @@ tests_test_tuple_cdr_LDADD = \
 
 tests_test_tuple_end_SOURCES = \
 	tests/test_tuple_end.cc
+tests_test_tuple_end_CPPFLAGS = \
+	$(COMMON_CPPFLAGS)
 tests_test_tuple_end_CXXFLAGS = \
 	$(COMMON_CXXFLAGS)
 tests_test_tuple_end_LDADD = \
@@ -127,6 +130,8 @@ tests_test_tuple_end_LDADD = \
 
 tests_test_tuple_for_each_SOURCES = \
 	tests/test_tuple_for_each.cc
+tests_test_tuple_for_each_CPPFLAGS = \
+	$(COMMON_CPPFLAGS)
 tests_test_tuple_for_each_CXXFLAGS = \
 	$(COMMON_CXXFLAGS)
 tests_test_tuple_for_each_LDADD = \
@@ -134,6 +139,8 @@ tests_test_tuple_for_each_LDADD = \
 
 tests_test_tuple_interlace_SOURCES = \
 	tests/test_tuple_interlace.cc
+tests_test_tuple_interlace_CPPFLAGS = \
+	$(COMMON_CPPFLAGS)
 tests_test_tuple_interlace_CXXFLAGS = \
 	$(COMMON_CXXFLAGS)
 tests_test_tuple_interlace_LDADD = \
@@ -141,6 +148,8 @@ tests_test_tuple_interlace_LDADD = \
 
 tests_test_tuple_print_SOURCES = \
 	tests/test_tuple_print.cc
+tests_test_tuple_print_CPPFLAGS = \
+	$(COMMON_CPPFLAGS)
 tests_test_tuple_print_CXXFLAGS = \
 	$(COMMON_CXXFLAGS)
 tests_test_tuple_print_LDADD = \
@@ -148,6 +157,8 @@ tests_test_tuple_print_LDADD = \
 
 tests_test_tuple_start_SOURCES = \
 	tests/test_tuple_start.cc
+tests_test_tuple_start_CPPFLAGS = \
+	$(COMMON_CPPFLAGS)
 tests_test_tuple_start_CXXFLAGS = \
 	$(COMMON_CXXFLAGS)
 tests_test_tuple_start_LDADD = \
@@ -155,6 +166,8 @@ tests_test_tuple_start_LDADD = \
 
 tests_test_tuple_subset_SOURCES = \
 	tests/test_tuple_subset.cc
+tests_test_tuple_subset_CPPFLAGS = \
+	$(COMMON_CPPFLAGS)
 tests_test_tuple_subset_CXXFLAGS = \
 	$(COMMON_CXXFLAGS)
 tests_test_tuple_subset_LDADD = \
@@ -162,6 +175,8 @@ tests_test_tuple_subset_LDADD = \
 
 tests_test_tuple_transform_each_SOURCES = \
 	tests/test_tuple_transform_each.cc
+tests_test_tuple_transform_each_CPPFLAGS = \
+	$(COMMON_CPPFLAGS)
 tests_test_tuple_transform_each_CXXFLAGS = \
 	$(COMMON_CXXFLAGS)
 tests_test_tuple_transform_each_LDADD = \

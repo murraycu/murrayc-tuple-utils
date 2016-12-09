@@ -43,6 +43,15 @@ MM_ARG_ENABLE_WARNINGS([PROJECT_WXXFLAGS],
                        [])
 
 
+# TODO: Just use the regular PREFIXSUFFIX_WXXFLAG
+# (and use -I instead of -isystem in Makefile_tes
+# if this googletest problem is fixed:
+# https://github.com/google/googletest/issues/533
+MM_ARG_ENABLE_WARNINGS([PROJECT_GTEST_WXXFLAGS],
+                       [-Wall],
+                       [-pedantic -Wall -Wextra -Wshadow -Wformat-security -Wno-missing-field-initializers -fsanitize=undefined -ftrapv -DGSEAL_ENABLE],
+                       [])
+
 AC_CONFIG_FILES([Makefile
   ${MURRAYC_TUPLE_UTILS_MODULE_NAME}.pc:murrayc-tuple-utils.pc.in
   docs/Makefile

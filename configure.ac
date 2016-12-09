@@ -37,16 +37,9 @@ AC_SUBST([LIBMURRAYC_TUPLE_UTILS_SO_VERSION], [0:0:0])
 #PKG_CHECK_MODULES([PROJECT], [])
 
 AC_LANG([C++])
-
-# We don't use -Wsuggest-override because googletest doesn't use the override
-# keyword yet:
-# https://github.com/google/googletest/issues/533
-# We could have separate warnings flags for the test compilation, but currently
-# the tests are the only
-# things are are built anyway, because this is a header-only library.
 MM_ARG_ENABLE_WARNINGS([PROJECT_WXXFLAGS],
                        [-Wall],
-                       [-pedantic -Wall -Wextra -Wshadow -Wformat-security -Wno-missing-field-initializers -fsanitize=undefined -ftrapv -DGSEAL_ENABLE],
+                       [-pedantic -Wall -Wextra -Wsuggest-override -Wshadow -Wformat-security -Wno-missing-field-initializers -fsanitize=undefined -ftrapv -DGSEAL_ENABLE],
                        [])
 
 

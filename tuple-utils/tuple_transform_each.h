@@ -110,7 +110,7 @@ struct tuple_transform_each_impl {
       const auto t_element =
         std::tuple<to_element_type>(T_transformer<from_element_type>::transform(std::get<index>(t_original)));
 
-      if constexpr(size == 1) {
+      if constexpr(size_from_index == 1) {
         const auto tuple_rest = tuple_start<size - 1>(std::forward<T_current>(t));
         return std::tuple_cat(tuple_rest, t_element);
       } else {

@@ -26,7 +26,7 @@ set (MURRAYC_TUPLE_UTILS_SOVERSION 0)
 
 project (murrayc_tuple_utils)
 
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
 set (PROJECT_SOURCE_DIR "${murrayc_tuple_utils_SOURCE_DIR}/murrayc-tuple-utils")
 

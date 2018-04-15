@@ -15,7 +15,7 @@ AC_PROG_CC
 AM_PROG_CC_C_O
 AC_PROG_CXX
 
-AX_CXX_COMPILE_STDCXX([14], [noext], [mandatory])
+AX_CXX_COMPILE_STDCXX([17], [noext], [mandatory])
 
 LT_PREREQ([2.2.6])
 LT_INIT([win32-dll])

@@ -62,7 +62,7 @@ TEST(TestTupleTransformEach, SameTypes) {
   }
 
   {
-    auto t_original = std::make_tuple(1, (double)2.1f, 3);
+    auto t_original = std::make_tuple(1, static_cast<double>(2.1f), 3);
     auto t_transformed =
       tupleutils::tuple_transform_each<transform_to_string>(t_original);
     auto t_expected =
@@ -130,7 +130,7 @@ TEST(TestTupleTransformEach, TypeMultipeTypes) {
 }
 
 TEST(TestTupleTransformEach, MultipleTypes) {
-  auto t_original = std::make_tuple(1, (double)2.1f, std::string("3"));
+  auto t_original = std::make_tuple(1, static_cast<double>(2.1f), std::string("3"));
   auto t_transformed =
     tupleutils::tuple_transform_each<transform_to_something>(t_original);
   auto t_expected = std::make_tuple(std::string("1"), '2', 3);
@@ -303,7 +303,7 @@ public:
   static
   int
   transform(double from) {
-    return (int)from;
+    return static_cast<int>(from);
   }
 };
 
@@ -313,7 +313,7 @@ public:
 // though it works with clang++.
 // TODO: Try it with a newer g++.
 TEST(TestTupleTransformEach, ConstExpr) {
-  constexpr auto t_original = std::make_tuple(1, (double)2.1f);
+  constexpr auto t_original = std::make_tuple(1, static_cast<double>(2.1f));
   constexpr auto t_transformed =
     tupleutils::tuple_transform_each<transform_as_constexpr_to_something>(t_original);
   constexpr auto t_expected = std::make_tuple('b', 2);

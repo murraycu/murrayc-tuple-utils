@@ -37,7 +37,7 @@ TEST(TestTupleForEach, SameType) {
   }
 
   {
-    auto t_original = std::make_tuple(1, (double)2.1f, 3);
+    auto t_original = std::make_tuple(1, static_cast<double>(2.1f), 3);
     tupleutils::tuple_for_each<for_each_simple>(t_original);
   }
 }
@@ -54,7 +54,7 @@ public:
 
 TEST(TestTupleForEach, SameTypesWithExtra) {
   {
-    auto t_original = std::make_tuple(1, (double)2.1f, 3);
+    auto t_original = std::make_tuple(1, static_cast<double>(2.1f), 3);
     tupleutils::tuple_for_each<for_each_simple_with_extras>(
       t_original, 89, "eightynine");
   }
@@ -71,7 +71,7 @@ public:
 
 TEST(TestTupleForEach, SameTypesWithNonConstExtra) {
   {
-    auto t_original = std::make_tuple(1, (double)2.1f, 3);
+    auto t_original = std::make_tuple(1, static_cast<double>(2.1f), 3);
     int extra = 0;
 
     tupleutils::tuple_for_each<for_each_simple_with_nonconst_extras>(t_original, extra);
@@ -131,7 +131,7 @@ public:
 };
 
 TEST(TestTupleForEach, MultipleTypes) {
-  auto t_original = std::make_tuple(1, (double)2.1f, std::string("3"));
+  auto t_original = std::make_tuple(1, static_cast<double>(2.1f), std::string("3"));
   tupleutils::tuple_for_each<visitor_with_specializations>(t_original);
 }
 
@@ -203,7 +203,7 @@ TEST(TestTupleForEach, EmptyTuple) {
 // TODO: Does this test function itself need to be constexpr,
 // and if so, how can we do that with googletest?
 TEST(TestTupleForEach, ConstExpr) {
-  constexpr auto t_original = std::make_tuple(1, (double)2.1f, "3");
+  constexpr auto t_original = std::make_tuple(1, static_cast<double>(2.1f), "3");
   tupleutils::tuple_for_each<visitor_with_specializations>(t_original);
 }
 

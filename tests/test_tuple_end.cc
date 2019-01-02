@@ -15,6 +15,7 @@
  */
 
 #include <cstdlib>
+#include <string>
 #include <tuple-utils/tuple_end.h>
 #include <functional>
 #include <gtest/gtest.h>

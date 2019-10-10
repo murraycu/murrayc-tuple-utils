@@ -16,10 +16,15 @@ jobs:
         sudo apt update
         sudo apt install mm-common clang-8
         export CXX=clang++-8
-        ./autogen.sh
-        ./configure
+        mkdir build
+        cd build
+        ../autogen.sh
         make
     - name: Test
-      run: make check
+      run: |
+        cd build
+        make check
     - name: Distcheck
-      run: make distcheck
+      run: |
+        cd build
+        make distcheck

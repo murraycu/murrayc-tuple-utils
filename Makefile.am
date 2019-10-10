@@ -2,8 +2,7 @@
 AUTOMAKE_OPTIONS = subdir-objects
 
 # Point to our macro directory and pick up user flags from the environment
-ACLOCAL_AMFLAGS  = -I macros ${ACLOCAL_FLAGS}
-
+ACLOCAL_AMFLAGS  = -I macros ${ACLOCAL_FLAGS} 
 # Make warnings always fatal at distcheck time, and disable execution
 # of tools that change files not installed by the package itself
 DISTCHECK_CONFIGURE_FLAGS = --enable-warnings=fatal --disable-update-mime-database
@@ -51,6 +50,7 @@ EXTRA_DIST = $(gtest_top)/src/gtest-all.cc \
 	     $(gtest_top)/src/gtest-printers.cc \
 	     $(gtest_top)/src/gtest.cc \
 	     $(gtest_top)/src/gtest_main.cc \
+	     $(gtest_top)/src/gtest-matchers.cc \
 	     $(gtest_top)/src/gtest-test-part.cc \
 	     $(gtest_top)/src/gtest-death-test.cc \
 	     $(gtest_top)/src/gtest-port.cc \
@@ -62,6 +62,7 @@ EXTRA_DIST = $(gtest_top)/src/gtest-all.cc \
 	     $(gtest_top)/include/gtest/gtest.h \
 	     $(gtest_top)/include/gtest/gtest-printers.h \
 	     $(gtest_top)/include/gtest/gtest-typed-test.h \
+	     $(gtest_top)/include/gtest/gtest-matchers.h \
 	     $(gtest_top)/include/gtest/gtest-message.h \
 	     $(gtest_top)/include/gtest/gtest_prod.h \
 	     $(gtest_top)/include/gtest/gtest-param-test.h \
@@ -72,9 +73,6 @@ EXTRA_DIST = $(gtest_top)/src/gtest-all.cc \
 	     $(gtest_top)/include/gtest/internal/gtest-port.h \
 	     $(gtest_top)/include/gtest/internal/gtest-internal.h \
 	     $(gtest_top)/include/gtest/internal/gtest-string.h \
-	     $(gtest_top)/include/gtest/internal/gtest-linked_ptr.h \
-	     $(gtest_top)/include/gtest/internal/gtest-tuple.h \
-	     $(gtest_top)/include/gtest/internal/gtest-param-util-generated.h \
 	     $(gtest_top)/include/gtest/internal/gtest-type-util.h \
 	     $(gtest_top)/include/gtest/internal/gtest-param-util.h \
 	     $(gtest_top)/include/gtest/internal/custom/gtest.h \

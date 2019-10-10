@@ -9,6 +9,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - uses: textbook/git-checkout-submodule-action@2.0.0
     - uses: docker://ubuntu:19.10
     - name: Build
       run: |

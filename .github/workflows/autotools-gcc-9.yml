@@ -16,10 +16,15 @@ jobs:
         sudo apt update
         sudo apt install mm-common g++-9
         export CXX=g++-9
-        ./autogen.sh
-        ./configure
+        mkdir build
+        cd build
+        ../autogen.sh
         make
     - name: Test
-      run: make check
+      run: |
+        cd build
+        make check
     - name: Distcheck
-      run: make distcheck
+      run: |
+        cd build
+        make distcheck

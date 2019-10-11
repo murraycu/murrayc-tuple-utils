@@ -37,51 +37,51 @@ nobase_library_include_HEADERS = $(h_sources_public)
 
 
 # Build googletest:
-gtest_top = googletest/googletest
+gtest_top_srcdir = $(top_srcdir)/googletest/googletest
 check_LTLIBRARIES = libgtest.la
-libgtest_la_SOURCES = $(gtest_top)/src/gtest-all.cc \
-		      $(gtest_top)/src/gtest_main.cc
+libgtest_la_SOURCES = $(gtest_top_srcdir)/src/gtest-all.cc \
+		      $(gtest_top_srcdir)/src/gtest_main.cc
 
-libgtest_la_CPPFLAGS = -I$(top_srcdir)/$(gtest_top)/include -I$(top_srcdir)/$(gtest_top) \
+libgtest_la_CPPFLAGS = -I$(gtest_top_srcdir)/include -I$(gtest_top_srcdir) \
 		       $(PROJECT_GTEST_WXXFLAGS)
 libgtest_la_LDFLAGS = -pthread
-EXTRA_DIST = $(gtest_top)/src/gtest-all.cc \
-	     $(gtest_top)/src/gtest-filepath.cc \
-	     $(gtest_top)/src/gtest-printers.cc \
-	     $(gtest_top)/src/gtest.cc \
-	     $(gtest_top)/src/gtest_main.cc \
-	     $(gtest_top)/src/gtest-matchers.cc \
-	     $(gtest_top)/src/gtest-test-part.cc \
-	     $(gtest_top)/src/gtest-death-test.cc \
-	     $(gtest_top)/src/gtest-port.cc \
-	     $(gtest_top)/src/gtest-typed-test.cc \
-	     $(gtest_top)/src/gtest-internal-inl.h \
-	     $(gtest_top)/include/gtest/gtest-death-test.h \
-	     $(gtest_top)/include/gtest/gtest_pred_impl.h \
-	     $(gtest_top)/include/gtest/gtest-test-part.h \
-	     $(gtest_top)/include/gtest/gtest.h \
-	     $(gtest_top)/include/gtest/gtest-printers.h \
-	     $(gtest_top)/include/gtest/gtest-typed-test.h \
-	     $(gtest_top)/include/gtest/gtest-matchers.h \
-	     $(gtest_top)/include/gtest/gtest-message.h \
-	     $(gtest_top)/include/gtest/gtest_prod.h \
-	     $(gtest_top)/include/gtest/gtest-param-test.h \
-	     $(gtest_top)/include/gtest/gtest-spi.h \
-	     $(gtest_top)/include/gtest/internal/gtest-death-test-internal.h \
-	     $(gtest_top)/include/gtest/internal/gtest-port-arch.h \
-	     $(gtest_top)/include/gtest/internal/gtest-filepath.h \
-	     $(gtest_top)/include/gtest/internal/gtest-port.h \
-	     $(gtest_top)/include/gtest/internal/gtest-internal.h \
-	     $(gtest_top)/include/gtest/internal/gtest-string.h \
-	     $(gtest_top)/include/gtest/internal/gtest-type-util.h \
-	     $(gtest_top)/include/gtest/internal/gtest-param-util.h \
-	     $(gtest_top)/include/gtest/internal/custom/gtest.h \
-	     $(gtest_top)/include/gtest/internal/custom/gtest-printers.h \
-	     $(gtest_top)/include/gtest/internal/custom/gtest-port.h
+EXTRA_DIST = $(gtest_top_srcdir)/src/gtest-all.cc \
+	     $(gtest_top_srcdir)/src/gtest-filepath.cc \
+	     $(gtest_top_srcdir)/src/gtest-printers.cc \
+	     $(gtest_top_srcdir)/src/gtest.cc \
+	     $(gtest_top_srcdir)/src/gtest_main.cc \
+	     $(gtest_top_srcdir)/src/gtest-matchers.cc \
+	     $(gtest_top_srcdir)/src/gtest-test-part.cc \
+	     $(gtest_top_srcdir)/src/gtest-death-test.cc \
+	     $(gtest_top_srcdir)/src/gtest-port.cc \
+	     $(gtest_top_srcdir)/src/gtest-typed-test.cc \
+	     $(gtest_top_srcdir)/src/gtest-internal-inl.h \
+	     $(gtest_top_srcdir)/include/gtest/gtest-death-test.h \
+	     $(gtest_top_srcdir)/include/gtest/gtest_pred_impl.h \
+	     $(gtest_top_srcdir)/include/gtest/gtest-test-part.h \
+	     $(gtest_top_srcdir)/include/gtest/gtest.h \
+	     $(gtest_top_srcdir)/include/gtest/gtest-printers.h \
+	     $(gtest_top_srcdir)/include/gtest/gtest-typed-test.h \
+	     $(gtest_top_srcdir)/include/gtest/gtest-matchers.h \
+	     $(gtest_top_srcdir)/include/gtest/gtest-message.h \
+	     $(gtest_top_srcdir)/include/gtest/gtest_prod.h \
+	     $(gtest_top_srcdir)/include/gtest/gtest-param-test.h \
+	     $(gtest_top_srcdir)/include/gtest/gtest-spi.h \
+	     $(gtest_top_srcdir)/include/gtest/internal/gtest-death-test-internal.h \
+	     $(gtest_top_srcdir)/include/gtest/internal/gtest-port-arch.h \
+	     $(gtest_top_srcdir)/include/gtest/internal/gtest-filepath.h \
+	     $(gtest_top_srcdir)/include/gtest/internal/gtest-port.h \
+	     $(gtest_top_srcdir)/include/gtest/internal/gtest-internal.h \
+	     $(gtest_top_srcdir)/include/gtest/internal/gtest-string.h \
+	     $(gtest_top_srcdir)/include/gtest/internal/gtest-type-util.h \
+	     $(gtest_top_srcdir)/include/gtest/internal/gtest-param-util.h \
+	     $(gtest_top_srcdir)/include/gtest/internal/custom/gtest.h \
+	     $(gtest_top_srcdir)/include/gtest/internal/custom/gtest-printers.h \
+	     $(gtest_top_srcdir)/include/gtest/internal/custom/gtest-port.h
 
 COMMON_CXXFLAGS = $(PROJECT_CFLAGS) $(PROJECT_WXXFLAGS) $(BOOST_CPPFLAGS)
 COMMON_CPPFLAGS = -I$(top_builddir) -I$(top_srcdir) \
-		  -isystem $(top_srcdir)/$(gtest_top)/include
+		  -isystem $(gtest_top_srcdir)/include
 COMMON_LIBS = $(PROJECT_LIBS) libgtest.la
 
 check_PROGRAMS = \

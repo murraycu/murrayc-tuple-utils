@@ -40,8 +40,17 @@ nobase_library_include_HEADERS = $(h_sources_public)
 gtest_top = googletest/googletest
 gtest_top_srcdir = $(top_srcdir)/$(gtest_top)
 check_LTLIBRARIES = libgtest.la
-libgtest_la_SOURCES = $(gtest_top)/src/gtest-all.cc \
-		      $(gtest_top)/src/gtest_main.cc
+
+# TODO: Use the gtest_top variable when we know we are always using automake >= 1.16
+# ( See the mention of bug 13928 in https://lists.gnu.org/archive/html/info-gnu/2018-02/msg00008.html )
+# Otherwise, the build will fail because it looks for .Plo files in a deps/ directory in a path that mentions
+# the actual variable name, not the variable's expanded value.
+#
+# libgtest_la_SOURCES = $(gtest_top)/src/gtest-all.cc \
+#		      $(gtest_top)/src/gtest_main.cc
+
+libgtest_la_SOURCES = googletest/googletest/src/gtest-all.cc \
+		      googletest/googletest/src/gtest_main.cc
 
 libgtest_la_CPPFLAGS = -I$(gtest_top_srcdir)/include -I$(gtest_top_srcdir) \
 		       $(PROJECT_GTEST_WXXFLAGS)

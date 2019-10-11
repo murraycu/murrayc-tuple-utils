@@ -37,10 +37,11 @@ nobase_library_include_HEADERS = $(h_sources_public)
 
 
 # Build googletest:
-gtest_top_srcdir = $(top_srcdir)/googletest/googletest
+gtest_top = googletest/googletest
+gtest_top_srcdir = $(top_srcdir)/$(gtest_top)
 check_LTLIBRARIES = libgtest.la
-libgtest_la_SOURCES = $(gtest_top_srcdir)/src/gtest-all.cc \
-		      $(gtest_top_srcdir)/src/gtest_main.cc
+libgtest_la_SOURCES = $(gtest_top)/src/gtest-all.cc \
+		      $(gtest_top)/src/gtest_main.cc
 
 libgtest_la_CPPFLAGS = -I$(gtest_top_srcdir)/include -I$(gtest_top_srcdir) \
 		       $(PROJECT_GTEST_WXXFLAGS)

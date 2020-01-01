@@ -1,3 +1,17 @@
+0.1.0:
+
+* Build:
+  - Require C++17.
+  - Add CMake build files, as an alternative.
+  - autotools: Fix the build with automake < 1.16
+  - autotools: Reduce the required mm-common version.
+  - autotools: Distribute autogen.sh and the CMake build files.
+  - autotools: Fix distcheck.
+  - Use googletest 1.10.0
+* C++17: tuple_transform_each, tuple_type_transform_each:
+  Replace std::result_of with std::invoke_result.
+* C++17: Use constexpr if instead of template specializations.
+
 0.0.3:
 
 * Relicense under LGPL instead of GPL.

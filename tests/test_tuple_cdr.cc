@@ -14,7 +14,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
 
-#include <cstdlib>
 #include <string>
 #include <tuple-utils/tuple_cdr.h>
 #include <functional>

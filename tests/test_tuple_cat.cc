@@ -14,7 +14,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
 
-#include <cstdlib>
 #include <tuple-utils/tuple_cat.h>
 //#include <functional>
 #include "gtest/gtest.h"

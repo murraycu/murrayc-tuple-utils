@@ -6,7 +6,10 @@ However, this is about building from source.
 ## autotools
 
 murrayc-tuple-utils uses autotools as its main build system,
-so you can build or install with the regular configure/make steps.
+
+### Building from a tarball
+
+You can build or install with the regular configure/make steps.
 For instance:
   ./configure --prefix=/opt/something
 then
@@ -18,6 +21,27 @@ You can build the examples and tests, and run the tests, like so:
 We create the tarball release like so:
   make distcheck
 
+
+### Building from git
+
+You will need to get both the git module and its git submodules, like so:
+
+  $ git clone git@github.com:murraycu/murrayc-tuple-utils.git
+  $ cd murrayc-tuple-utils
+  $ git submodule update --init --recursive
+
+The autogen.sh script generates the build files and calls ./configure.
+
+For instance:
+  ./autogen.sh --prefix=/opt/something --enable-warnings=fatal
+then
+  make
+or
+  make install
+You can build the examples and tests, and run the tests, like so:
+  make check
+We create the tarball release like so:
+  make distcheck
 
 ## CMake
 

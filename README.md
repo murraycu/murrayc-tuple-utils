@@ -1,6 +1,9 @@
 # murrayc-tuple-utils
 A rough collection of code to manipulate C++ std::tuple&lt;>s.
 
+See also the [instructions for building this library from source](README_build.md), though only the
+tests actually need to be built.
+
 ## Basic Usage
 
 Include the specific header. For instance,
